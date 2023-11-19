@@ -163,18 +163,34 @@ foreach($search->get() as $document)
 
             // Replace document
             // https://github.com/manticoresoftware/manticoresearch-php/issues/10#issuecomment-612685916
-            $index->replaceDocument(
-                [
-                    'url'         => $document->get('url'),
-                    'title'       => $title,
-                    'description' => $description,
-                    'keywords'    => $keywords,
-                    'code'        => $code,
-                    'size'        => $size,
-                    'mime'        => $mime,
-                    'time'        => time(),
-                ],
+            $data =
+            [
+                'url'         => $document->get('url'),
+                'title'       => $title,
+                'description' => $description,
+                'keywords'    => $keywords,
+                'code'        => $code,
+                'size'        => $size,
+                'mime'        => $mime,
+                'time'        => time()
+            ];
+
+            $result = $index->replaceDocument(
+                $data,
                 $document->getId()
+            );
+
+            echo sprintf(
+                'index "%s" updated: %s %s' . PHP_EOL,
+                $config->manticore->index->document,
+                print_r(
+                    $result,
+                    true
+                ),
+                print_r(
+                    $data,
+                    true
+                ),
             );
 
             // Crawl documents
@@ -257,13 +273,4 @@ foreach($search->get() as $document)
             }
         }
     }
-
-    echo sprintf(
-        'index "%s" updated: %s' . PHP_EOL,
-        $config->manticore->index->document,
-        print_r(
-            $document,
-            true
-        )
-    );
 }
