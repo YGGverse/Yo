@@ -273,4 +273,9 @@ foreach($search->get() as $document)
             }
         }
     }
+
+    // Apply delay
+    sleep(
+        $config->cli->document->crawl->queue->limit
+    );
 }

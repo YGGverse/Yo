@@ -19,7 +19,8 @@
             {
                 "queue":
                 {
-                    "limit":1
+                    "limit":1,
+                    "delay":1
                 },
                 "selector":
                 {
