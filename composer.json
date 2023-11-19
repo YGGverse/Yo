@@ -1,0 +1,21 @@
+{
+    "name": "yggverse/yo",
+    "description": "Yo! Micro Web Crawler in PHP & Manticore",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Yggverse\\Yo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "YGGverse"
+        }
+    ],
+    "require": {
+        "manticoresoftware/manticoresearch-php": "^3.1",
+        "symfony/css-selector": "^6.3",
+        "symfony/dom-crawler": "^6.3"
+    }
+}
