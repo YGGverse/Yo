@@ -44,7 +44,7 @@
                     "image":
                     {
                         "attribute":"src",
-                        "external":true,
+                        "external":false,
                         "regex":"/.*/ui"
                     },
                     "audio":
