@@ -24,7 +24,7 @@ $index = $client->index(
 );
 
 // Check URL for exist
-$result = $index->search('@url "' . $argv[1] . '"')
+$result = $index->search('@url "' . trim($argv[1]) . '"')
                 ->limit(1)
                 ->get();
 
@@ -42,7 +42,7 @@ if ($result->getTotal())
 // Add
 $result = $index->addDocument(
     [
-        'url' => $argv[1]
+        'url' => trim($argv[1])
     ]
 );
 
