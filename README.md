@@ -2,6 +2,23 @@
 
 Micro Web Crawler in PHP & Manticore
 
+Yo! is the next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler.
+
+Engine written in PHP and uses [Manticore](https://github.com/manticoresoftware) search engine on backend.
+
+Default build adapted for [Yggdrasil](https://github.com/yggdrasil-network) eco-system but could be used to make own search project.
+
+Project contain:
+
+* CLI tools for index operations
+* JS-less frontend to make search web portal
+* API tools to make search index distributed
+
+Features:
+
+* MIME-based crawler with flexible filter settings
+* Page snap history with local and remote mirrors support
+
 ## CLI
 
 ### Index
