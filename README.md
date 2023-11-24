@@ -1,11 +1,11 @@
 # Yo! Micro Web Crawler in PHP & Manticore
 
-Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler.
+Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler
 
- - Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API.
+ - Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API
  - Refactored data exchange model with drop all primary keys dependencies
  - Snaps now using tar.gz compression to reduce storage requirements and still supporting remote mirrors, FTP including
- - Codebase following minimalism everywhere as possible.
+ - Codebase following minimalism principles everywhere
 
 ## Implementation
 
@@ -25,6 +25,14 @@ Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-
 * Page snap history with local and remote mirrors support
 
 ## Documentation
+
+### Install
+
+1. Install php and manticore
+2. Grab latest version `git clone https://github.com/YGGverse/Yo.git`
+3. Check `src/config.json` for any customizations
+4. Run indexes init script `php src/cli/index/init.php`
+5. [Start crawling!](https://github.com/YGGverse/Yo#add)
 
 ### CLI
 
