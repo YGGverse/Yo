@@ -2,16 +2,16 @@
 
 Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler
 
- - Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API
- - Refactored data exchange model with drop all primary keys dependencies
+ - Index model changed to distributed cluster model, and now oriented to aggregate search results from network instances trough API
+ - Refactored data exchange model where drop all internal keys dependencies
  - Snaps now using tar.gz compression to reduce storage requirements and still supporting remote mirrors, FTP including
  - Minimalism everywhere
 
 ## Implementation
 
-Engine written in PHP and uses [Manticore](https://github.com/manticoresoftware) on backend.
+Engine written in PHP 8 and uses [Manticore](https://github.com/manticoresoftware) on backend.
 
-Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-network) but could be used to make internet search portal.
+Default build adapted for [Yggdrasil](https://github.com/yggdrasil-network) but could be used to make internet search portal.
 
 ## Components
 
@@ -29,7 +29,7 @@ Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-
 1. Install `composer`, `php` and `manticore`
 2. Grab latest `Yo` version `git clone https://github.com/YGGverse/Yo.git`
 3. Run `composer update` inside the project directory
-4. Check `src/config.json` for any customizations
+4. Copy and customize config file `cp example/config.json config.json`
 5. Make sure `storage` folder writable
 6. Run indexes init script `php src/cli/index/init.php`
 7. Add new URL `php src/cli/document/add.php URL`

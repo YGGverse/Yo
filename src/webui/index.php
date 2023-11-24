@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 // Init config
 $config = json_decode(
     file_get_contents(
-        __DIR__ . '/../config.json'
+        __DIR__ . '/../../config.json'
     )
 );
 
