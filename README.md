@@ -27,11 +27,12 @@ Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-
 ### Install
 
 1. Install `composer`, `php` and `manticore`
-2. Grab latest version `git clone https://github.com/YGGverse/Yo.git`
+2. Grab latest `Yo` version `git clone https://github.com/YGGverse/Yo.git`
 3. Run `composer update` inside the project directory
 4. Check `src/config.json` for any customizations
-5. Run indexes init script `php src/cli/index/init.php`
-6. [Start crawling!](https://github.com/YGGverse/Yo#documentation)
+5. Make sure `storage` folder writable
+6. Run indexes init script `php src/cli/index/init.php`
+7. [Start crawling!](https://github.com/YGGverse/Yo#documentation)
 
 ## Documentation
 
