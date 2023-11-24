@@ -162,7 +162,6 @@ $results = $index->search($q)
 
       a, a:visited, a:active {
         color: #9ba2ac;
-        display: inline-block;
         font-size: 12px;
         margin-top: 8px;
       }
