@@ -24,15 +24,16 @@ Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-
 * MIME-based crawler with flexible filter settings
 * Page snap history with local and remote mirrors support
 
-## Documentation
-
 ### Install
 
-1. Install php and manticore
+1. Install `composer`, `php` and `manticore`
 2. Grab latest version `git clone https://github.com/YGGverse/Yo.git`
-3. Check `src/config.json` for any customizations
-4. Run indexes init script `php src/cli/index/init.php`
-5. [Start crawling!](https://github.com/YGGverse/Yo#add)
+3. Run `composer update` inside the project directory
+4. Check `src/config.json` for any customizations
+5. Run indexes init script `php src/cli/index/init.php`
+6. [Start crawling!](https://github.com/YGGverse/Yo#documentation)
+
+## Documentation
 
 ### CLI
 
