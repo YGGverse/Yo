@@ -1,4 +1,4 @@
 /storage/
 /vendor/
-composer.lock
-config.json
+/config.json
+/composer.lock
