@@ -68,7 +68,7 @@
         {
             "local":{
                 "enabled":true,
-                "location":"/storage/snap",
+                "directory":"storage/snap",
                 "size":
                 {
                     "max":100024

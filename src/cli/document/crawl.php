@@ -252,6 +252,8 @@ foreach($search->get() as $document)
             {
                 foreach (array_unique($documents) as $url)
                 {
+                    $url = trim($url);
+
                     if (!$index->search('@url "' . $url . '"')
                                ->limit(1)
                                ->get()
@@ -272,9 +274,133 @@ foreach($search->get() as $document)
                 }
             }
         }
+
+        // Create snap
+        if ($config->cli->document->crawl->snap->enabled && $code === 200)
+        {
+            try
+            {
+                // Generate path
+                $time = time();
+
+                $md5url = md5(
+                    $document->get('url')
+                );
+
+                /// absolute
+                if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+                {
+                    $filepath = $config->snap->storage->local->directory;
+                }
+
+                /// relative
+                else
+                {
+                    $filepath = __DIR__ . '/../../../' . $config->snap->storage->local->directory;
+                }
+
+                $filepath = sprintf(
+                    '%s/%s',
+                    $filepath,
+                    implode(
+                        '/',
+                        str_split(
+                            $md5url
+                        )
+                    )
+                );
+
+                $filename = sprintf(
+                    '%s/%s.tar',
+                    $filepath,
+                    $time
+                );
+
+                @mkdir($filepath, 0755, true);
+
+                // Compress response to archive
+                $snap = new PharData($filename);
+
+                $snap->addFromString(
+                    'DATA',
+                    $response
+                );
+
+                $snap->addFromString(
+                    'MIME',
+                    $mime
+                );
+
+                $snap->addFromString(
+                    'URL',
+                    $document->get('url')
+                );
+
+                $snap->compress(
+                    Phar::GZ
+                );
+
+                unlink(
+                    $filename
+                );
+
+                $filename = sprintf(
+                    '%s.gz',
+                    $filename
+                );
+
+                // Copy to mirror storage on enabled
+                if ($config->snap->storage->mirror->enabled)
+                {
+                    // @TODO copy
+                    // Snap match remote storage size/mime conditions
+                }
+
+                // Remove snap on local storage disabled
+                if (!$config->snap->storage->local->enabled)
+                {
+                    @unlink(
+                        $filename
+                    );
+                }
+
+                // Remove snap on out of local storage size limits
+                if ($size > $config->snap->storage->local->size->max)
+                {
+                    @unlink(
+                        $filename
+                    );
+                }
+
+                // Remove snap on mime not allowed
+                $remove = true;
+                foreach ($config->snap->storage->local->mime as $whitelist)
+                {
+                    if (false !== stripos($mime, $whitelist))
+                    {
+                        $remove = false;
+                        break;
+                    }
+                }
+
+                if ($remove)
+                {
+                    @unlink(
+                        $filename
+                    );
+                }
+            }
+
+            catch (Exception $exception)
+            {
+                var_dump(
+                    $exception
+                );
+            }
+        }
     }
 
-    // Apply delay
+    // Crawl queue delay
     sleep(
         $config->cli->document->crawl->queue->limit
     );
