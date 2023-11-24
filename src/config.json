@@ -54,15 +54,42 @@
                         "external":false,
                         "regex":"/.*/ui"
                     }
+                },
+                "snap":
+                {
+                    "enabled":true
                 }
-            },
-            "snap":
-            {
+            }
+        }
+    },
+    "snap":
+    {
+        "storage":
+        {
+            "local":{
+                "enabled":true,
+                "location":"/storage/snap",
+                "size":
+                {
+                    "max":100024
+                },
                 "mime":
                 [
+                    "application/xhtml+xml",
+                    "application/javascript",
                     "text/html",
-                    "image/webp"
+                    "text/plain",
+                    "text/css",
+                    "image/webp",
+                    "image/png",
+                    "image/gif",
+                    "image/ico"
                 ]
+            },
+            "mirror":
+            {
+                "enabled":false,
+                "ftp":[]
             }
         }
     }
