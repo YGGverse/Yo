@@ -5,13 +5,13 @@ Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal t
  - Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API
  - Refactored data exchange model with drop all primary keys dependencies
  - Snaps now using tar.gz compression to reduce storage requirements and still supporting remote mirrors, FTP including
- - Codebase following minimalism principles everywhere
+ - Minimalism everywhere
 
 ## Implementation
 
 Engine written in PHP and uses [Manticore](https://github.com/manticoresoftware) on backend.
 
-Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-network) eco-system but could be used to make own search project.
+Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-network) but could be used to make internet search portal.
 
 ## Components
 
@@ -32,7 +32,15 @@ Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-
 4. Check `src/config.json` for any customizations
 5. Make sure `storage` folder writable
 6. Run indexes init script `php src/cli/index/init.php`
-7. [Start crawling!](https://github.com/YGGverse/Yo#documentation)
+7. Add new URL `php src/cli/document/add.php URL`
+8. Run crawler `php src/cli/document/crawl.php`
+9. Get search results `php src/cli/document/search.php '*'`
+
+#### Web UI
+
+1. `cd src/webui`
+2. `php -S 127.0.0.1:8080`
+3. now open `127.0.0.1:8080` in your browser!
 
 ## Documentation
 

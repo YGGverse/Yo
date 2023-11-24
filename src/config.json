@@ -11,6 +11,17 @@
             "document":"yo_document"
         }
     },
+    "webui":
+    {
+        "url":
+        {
+            "base":"http://127.0.0.1:8888"
+        },
+        "pagination":
+        {
+            "limit":20
+        }
+    },
     "cli":
     {
         "document":

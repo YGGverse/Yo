@@ -16,6 +16,7 @@
     "require": {
         "manticoresoftware/manticoresearch-php": "^3.1",
         "symfony/css-selector": "^6.3",
-        "symfony/dom-crawler": "^6.3"
+        "symfony/dom-crawler": "^6.3",
+        "jdenticon/jdenticon": "^1.0"
     }
 }
