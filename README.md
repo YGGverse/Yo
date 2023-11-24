@@ -1,6 +1,6 @@
 # Yo! Micro Web Crawler in PHP & Manticore
 
-Yo! is the next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler.
+Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler.
 
 Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API.
 
