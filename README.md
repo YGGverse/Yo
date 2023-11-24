@@ -2,11 +2,13 @@
 
 Yo! is the next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler.
 
-Index model changed to the distributed clustering model, and oriented to aggregate search results from different instances trough API.
+Index model changed to the distributed cluster model, and oriented to aggregate search results from different instances trough API.
+
+Codebase following minimalism such as possible.
 
 ## Implementation
 
-Engine written in PHP and uses [Manticore](https://github.com/manticoresoftware) search engine on backend.
+Engine written in PHP and uses [Manticore](https://github.com/manticoresoftware) on backend.
 
 Default build inspired and adapted for [Yggdrasil](https://github.com/yggdrasil-network) eco-system but could be used to make own search project.
 
