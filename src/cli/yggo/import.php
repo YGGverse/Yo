@@ -149,6 +149,7 @@ for ($i = 0; $i <= $total; $i++)
         $index->addDocument(
             [
                 'url'         => $url,
+                'crc32url'    => (int) $crc32url,
                 'time'        => (int) $remote->timeUpdated,
                 'code'        => (int) $remote->httpCode,
                 'size'        => (int) $remote->size,
