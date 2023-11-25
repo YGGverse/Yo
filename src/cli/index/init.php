@@ -81,16 +81,7 @@ $result = $index->create(
             'type' => 'integer'
         ]
     ],
-    [
-        'index_exact_words' => $config->manticore->index->document->settings->index_exact_words,
-        'html_strip'        => $config->manticore->index->document->settings->html_strip,
-        'min_word_len'      => $config->manticore->index->document->settings->min_word_len,
-        'min_prefix_len'    => $config->manticore->index->document->settings->min_prefix_len,
-        'morphology'        => implode(
-            ',',
-            $config->manticore->index->document->settings->morphology
-        )
-    ]
+    (array) $config->manticore->index->document->settings
 );
 
 echo sprintf(
