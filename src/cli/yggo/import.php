@@ -70,7 +70,7 @@ $total = $yggo->query('SELECT COUNT(*) AS `total` FROM `hostPage`
                                                     AND `hostPage`.`mime` IS NOT NULL
                                                     AND `hostPage`.`size` IS NOT NULL')->fetch()->total;
 
-$processed = 0;
+$processed = $start;
 
 for ($i = 0; $i <= $total; $i++)
 {
