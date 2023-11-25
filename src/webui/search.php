@@ -77,7 +77,7 @@ $results = $index->search($q)
 
       h1 {
         position: fixed;
-        top: 8px;
+        top: 2px;
         left: 24px;
       }
 
@@ -87,8 +87,8 @@ $results = $index->search($q)
       h1 > a:hover {
         color: #fff;
         font-weight: normal;
-        font-size: 24px;
-        margin: 10px 0;
+        font-size: 22px;
+        margin: 0;
         text-decoration: none;
       }
 
@@ -110,7 +110,7 @@ $results = $index->search($q)
       input {
         width: 100%;
         margin: 12px 0;
-        padding: 10px 0;
+        padding: 6px 0;
         border-radius: 32px;
         background-color: #000;
         color: #fff;
@@ -145,14 +145,14 @@ $results = $index->search($q)
       }
 
       button {
-        padding: 8px 16px;
+        padding: 6px 16px;
         border-radius: 4px;
         cursor: pointer;
         background-color: #3394fb;
         color: #fff;
         font-size: 14px;
         position: fixed;
-        top: 15px;
+        top: 12px;
         right: 24px;
       }
 

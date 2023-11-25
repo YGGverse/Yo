@@ -58,7 +58,7 @@ $index = $client->index(
       h1 {
         color: #fff;
         font-weight: normal;
-        font-size: 32px;
+        font-size: 36px;
         margin: 16px 0
       }
 
@@ -95,7 +95,7 @@ $index = $client->index(
 
       button {
         margin: 22px 0;
-        padding: 10px 16px;
+        padding: 6px 16px;
         border-radius: 4px;
         cursor: pointer;
         background-color: #3394fb;
