@@ -147,13 +147,13 @@ for ($i = 0; $i <= $total; $i++)
         $index->addDocument(
             [
                 'url'         => $url,
-                'time'        => $remote->timeUpdated,
-                'code'        => $remote->httpCode,
-                'mime'        => $remote->mime,
-                'size'        => $remote->size,
-                'title'       => $remote->title,
-                'description' => $remote->description,
-                'keywords'    => $remote->keywords
+                'time'        => (int) $remote->timeUpdated,
+                'code'        => (int) $remote->httpCode,
+                'size'        => (int) $remote->size,
+                'mime'        => (string) $remote->mime,
+                'title'       => (string) $remote->title,
+                'description' => (string) $remote->description,
+                'keywords'    => (string) $remote->keywords
             ]
         );
 
