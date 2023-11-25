@@ -15,7 +15,7 @@
     {
         "url":
         {
-            "base":"http://127.0.0.1:8888"
+            "base":"http://127.0.0.1"
         },
         "pagination":
         {
@@ -77,12 +77,15 @@
     {
         "storage":
         {
+            "tmp":{
+                "directory":"storage/tmp/snap"
+            },
             "local":{
                 "enabled":true,
                 "directory":"storage/snap",
                 "size":
                 {
-                    "max":100024
+                    "max":10000024
                 },
                 "mime":
                 [
@@ -99,8 +102,43 @@
             },
             "mirror":
             {
-                "enabled":false,
-                "ftp":[]
+                "ftp":
+                [
+                    {
+                        "enabled":false,
+                        "connection":
+                        {
+                            "port":21,
+                            "host":"",
+                            "username":"",
+                            "password":"",
+                            "directory":"/snap/yo",
+                            "timeout":30,
+                            "passive":true,
+                            "attempts":
+                            {
+                                "limit":0,
+                                "delay":60
+                            }
+                        },
+                        "size":
+                        {
+                            "max":10000024
+                        },
+                        "mime":
+                        [
+                            "application/xhtml+xml",
+                            "application/javascript",
+                            "text/html",
+                            "text/plain",
+                            "text/css",
+                            "image/webp",
+                            "image/png",
+                            "image/gif",
+                            "image/ico"
+                        ]
+                    }
+                ]
             }
         }
     }

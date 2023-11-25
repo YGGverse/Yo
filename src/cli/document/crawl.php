@@ -288,15 +288,15 @@ foreach($search->get() as $document)
                 );
 
                 /// absolute
-                if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+                if ('/' === substr($config->snap->storage->tmp->directory, 0, 1))
                 {
-                    $filepath = $config->snap->storage->local->directory;
+                    $filepath = $config->snap->storage->tmp->directory;
                 }
 
                 /// relative
                 else
                 {
-                    $filepath = __DIR__ . '/../../../' . $config->snap->storage->local->directory;
+                    $filepath = __DIR__ . '/../../../' . $config->snap->storage->tmp->directory;
                 }
 
                 $filepath = sprintf(
@@ -310,16 +310,16 @@ foreach($search->get() as $document)
                     )
                 );
 
-                $filename = sprintf(
+                @mkdir($filepath, 0755, true);
+
+                $tmp = sprintf(
                     '%s/%s.tar',
                     $filepath,
                     $time
                 );
 
-                @mkdir($filepath, 0755, true);
-
                 // Compress response to archive
-                $snap = new PharData($filename);
+                $snap = new PharData($tmp);
 
                 $snap->addFromString(
                     'DATA',
@@ -340,55 +340,188 @@ foreach($search->get() as $document)
                     Phar::GZ
                 );
 
-                unlink(
-                    $filename
+                unlink( // remove tarball
+                    $tmp
                 );
 
-                $filename = sprintf(
+                $tmp = sprintf(
                     '%s.gz',
-                    $filename
+                    $tmp
                 );
 
-                // Copy to mirror storage on enabled
-                if ($config->snap->storage->mirror->enabled)
+                // Copy to local storage on enabled
+                if ($config->snap->storage->local->enabled)
                 {
-                    // @TODO copy
-                    // Snap match remote storage size/mime conditions
-                }
+                    $allowed = false;
 
-                // Remove snap on local storage disabled
-                if (!$config->snap->storage->local->enabled)
-                {
-                    @unlink(
-                        $filename
-                    );
-                }
-
-                // Remove snap on out of local storage size limits
-                if ($size > $config->snap->storage->local->size->max)
-                {
-                    @unlink(
-                        $filename
-                    );
-                }
-
-                // Remove snap on mime not allowed
-                $remove = true;
-                foreach ($config->snap->storage->local->mime as $whitelist)
-                {
-                    if (false !== stripos($mime, $whitelist))
+                    // Check for mime allowed
+                    foreach ($config->snap->storage->local->mime as $whitelist)
                     {
-                        $remove = false;
-                        break;
+                        if (false !== stripos($mime, $whitelist))
+                        {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+
+                    // Check size limits
+                    if ($size > $config->snap->storage->local->size->max)
+                    {
+                        $allowed = false;
+                    }
+
+                    // Copy snap to the permanent storage
+                    if ($allowed)
+                    {
+                        /// absolute
+                        if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+                        {
+                            $filepath = $config->snap->storage->local->directory;
+                        }
+
+                        /// relative
+                        else
+                        {
+                            $filepath = __DIR__ . '/../../../' . $config->snap->storage->local->directory;
+                        }
+
+                        $filepath = sprintf(
+                            '%s/%s',
+                            $filepath,
+                            implode(
+                                '/',
+                                str_split(
+                                    $md5url
+                                )
+                            )
+                        );
+
+                        @mkdir($filepath, 0755, true);
+
+                        $filename = sprintf(
+                            '%s/%s',
+                            $filepath,
+                            basename(
+                                $tmp
+                            )
+                        );
+
+                        copy(
+                            $tmp,
+                            $filename
+                        );
                     }
                 }
 
-                if ($remove)
+                // Copy to FTP mirror storage on enabled
+                foreach ($config->snap->storage->mirror->ftp as $ftp)
                 {
-                    @unlink(
-                        $filename
+                    // Resource enabled
+                    if (!$ftp->enabled)
+                    {
+                        continue;
+                    }
+
+                    $allowed = false;
+
+                    // Check for mime allowed
+                    foreach ($ftp->mime as $whitelist)
+                    {
+                        if (false !== stripos($mime, $whitelist))
+                        {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+
+                    // Check size limits
+                    if ($size > $ftp->size->max)
+                    {
+                        $allowed = false;
+                    }
+
+                    if (!$allowed)
+                    {
+                        continue;
+                    }
+
+                    // Prepare location
+                    $filepath = implode(
+                        '/',
+                        str_split(
+                            $md5url
+                        )
                     );
+
+                    $filename = sprintf(
+                        '%s/%s',
+                        $filepath,
+                        basename(
+                            $tmp
+                        )
+                    );
+
+                    // Init connection
+                    $attempt = 1;
+
+                    do {
+
+                        $remote = new \Yggverse\Ftp\Client();
+
+                        $connection = $remote->connect(
+                                $ftp->connection->host,
+                                $ftp->connection->port,
+                                $ftp->connection->username,
+                                $ftp->connection->password,
+                                $ftp->connection->directory,
+                                $ftp->connection->timeout,
+                                $ftp->connection->passive
+                        );
+
+                        // Remote host connected
+                        if ($connection) {
+
+                            $remote->mkdir(
+                                $filepath,
+                                true
+                            );
+
+                            $remote->copy(
+                                $tmp,
+                                $filename
+                            );
+
+                            $remote->close();
+
+                        // On remote connection lost, repeat attempt
+                        } else {
+
+                            // Stop connection attempts on limit provided
+                            if ($ftp->connection->attempts->limit > 0 && $attempt > $ftp->connection->attempts->limit)
+                            {
+                                break;
+                            }
+
+                            // Log event
+                            echo sprintf(
+                                _('[attempt: %s] wait for remote storage "%s" reconnection...') . PHP_EOL,
+                                $attempt++,
+                                $ftp->connection->host,
+                            );
+
+                            // Delay next attempt
+                            sleep(
+                                $ftp->connection->attempts->delay
+                            );
+                        }
+
+                    } while ($connection === false);
                 }
+
+                // Remove tmp data
+                @unlink(
+                    $tmp
+                );
             }
 
             catch (Exception $exception)
