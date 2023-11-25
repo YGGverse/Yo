@@ -121,12 +121,14 @@ for ($i = 0; $i <= $total; $i++)
 
     foreach ($query->fetchAll() as $remote)
     {
-        $url = $remote->scheme . '://' . $remote->name . ($remote->port ? ':' . $remote->port : false) . $remote->uri;
+        $url      = $remote->scheme . '://' . $remote->name . ($remote->port ? ':' . $remote->port : false) . $remote->uri;
+        $crc32url = crc32($url);
 
         // Check for unique URL requested
         if (isset($argv[6]))
         {
-            $local = $index->search('@url "' . trim($argv[1]) . '"')
+            $local = $index->search('@url "' . trim($url) . '"')
+                           ->filter('crc32url', $crc32url)
                            ->limit(1)
                            ->get();
 
