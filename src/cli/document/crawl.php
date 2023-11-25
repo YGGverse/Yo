@@ -32,7 +32,7 @@ $search = new \Manticoresearch\Search(
 );
 
 $search->setIndex(
-    $config->manticore->index->document
+    $config->manticore->index->document->name
 );
 
 $search->match(
@@ -51,7 +51,7 @@ $search->limit(
 
 // Init index
 $index = $client->index(
-    $config->manticore->index->document
+    $config->manticore->index->document->name
 );
 
 // Begin queue
@@ -182,7 +182,7 @@ foreach($search->get() as $document)
 
             echo sprintf(
                 'index "%s" updated: %s %s' . PHP_EOL,
-                $config->manticore->index->document,
+                $config->manticore->index->document->name,
                 print_r(
                     $result,
                     true
@@ -268,7 +268,7 @@ foreach($search->get() as $document)
                         echo sprintf(
                             'add "%s" to "%s"' . PHP_EOL,
                             $url,
-                            $config->manticore->index->document
+                            $config->manticore->index->document->name
                         );
                     }
                 }

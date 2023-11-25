@@ -20,7 +20,7 @@ $client = new \Manticoresearch\Client(
 
 // Init index
 $index = $client->index(
-    $config->manticore->index->document
+    $config->manticore->index->document->name
 );
 
 // Request options
@@ -34,7 +34,7 @@ if (isset($argv[1]))
 
             echo sprintf(
                 'index "%s" deleted: %s' . PHP_EOL,
-                $config->manticore->index->document,
+                $config->manticore->index->document->name,
                 print_r(
                     $result,
                     true
@@ -80,12 +80,22 @@ $result = $index->create(
         [
             'type' => 'integer'
         ]
+    ],
+    [
+        'index_exact_words' => $config->manticore->index->document->settings->index_exact_words,
+        'html_strip'        => $config->manticore->index->document->settings->html_strip,
+        'min_word_len'      => $config->manticore->index->document->settings->min_word_len,
+        'min_prefix_len'    => $config->manticore->index->document->settings->min_prefix_len,
+        'morphology'        => implode(
+            ',',
+            $config->manticore->index->document->settings->morphology
+        )
     ]
 );
 
 echo sprintf(
     'index "%s" created: %s' . PHP_EOL,
-    $config->manticore->index->document,
+    $config->manticore->index->document->name,
     print_r(
         $result,
         true

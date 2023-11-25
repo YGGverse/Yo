@@ -32,7 +32,7 @@ $client = new \Manticoresearch\Client(
 
 // Init index
 $index = $client->index(
-    $config->manticore->index->document
+    $config->manticore->index->document->name
 );
 
 // Get totals
@@ -120,7 +120,7 @@ if (filter_var($q, FILTER_VALIDATE_URL))
     $query = '@url "' . $q . '"';
 }
 
-if (false === strpos($q, '"'))
+elseif (false === strpos($q, '"'))
 {
     $query = '"' . $q . '"';
 }

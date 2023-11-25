@@ -8,7 +8,22 @@
         },
         "index":
         {
-            "document":"yo_document"
+            "document":{
+                "name":"yo_document",
+                "settings":
+                {
+                    "morphology":
+                    [
+                        "stem_cz",
+                        "stem_ar",
+                        "stem_enru"
+                    ],
+                    "index_exact_words":1,
+                    "html_strip":1,
+                    "min_word_len":3,
+                    "min_prefix_len":3
+                }
+            }
         }
     },
     "webui":

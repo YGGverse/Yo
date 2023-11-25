@@ -20,7 +20,7 @@ $client = new \Manticoresearch\Client(
 
 // Init index
 $index = $client->index(
-    $config->manticore->index->document
+    $config->manticore->index->document->name
 );
 
 // Check URL for exist
@@ -33,7 +33,7 @@ if ($result->getTotal())
     echo sprintf(
         'URL "%s" already exists in "%s" index!' . PHP_EOL,
         $argv[1],
-        $config->manticore->index->document
+        $config->manticore->index->document->name
     );
 
     exit;
@@ -49,7 +49,7 @@ $result = $index->addDocument(
 echo sprintf(
     'URL "%s" added to "%s" index: %s' . PHP_EOL,
     $argv[1],
-    $config->manticore->index->document,
+    $config->manticore->index->document->name,
     print_r(
         $result,
         true
