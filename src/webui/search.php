@@ -235,8 +235,15 @@ $results = $index->search($q)
               <?php
                 $identicon = new \Jdenticon\Identicon();
 
-                $identicon->setValue($result->url);
+                $identicon->setValue(
+                    parse_url(
+                      $result->url,
+                      PHP_URL_HOST
+                    )
+                );
+
                 $identicon->setSize(16);
+
                 $identicon->setStyle(
                   [
                     'backgroundColor' => 'rgba(255, 255, 255, 0)',
