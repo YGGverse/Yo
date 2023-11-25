@@ -8,6 +8,13 @@ error_reporting(E_ALL);
 // Load dependencies
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+function plural(int $number, array $texts)
+{
+    $cases = [2, 0, 1, 1, 1, 2];
+
+    return $texts[(($number % 100) > 4 && ($number % 100) < 20) ? 2 : $cases[min($number % 10, 5)]];
+}
+
 // Init config
 $config = json_decode(
     file_get_contents(
@@ -26,6 +33,37 @@ $client = new \Manticoresearch\Client(
 // Init index
 $index = $client->index(
     $config->manticore->index->document
+);
+
+// Get totals
+$total = $index->search('')
+               ->option('cutoff', 0)
+               ->limit(0)
+               ->get()
+               ->getTotal();
+
+$placeholder = plural(
+    $total,
+    [
+        sprintf(
+            _('Over %s page or enter the new one...'),
+            number_format(
+                $total
+            )
+        ),
+        sprintf(
+            _('Over %s pages or enter the new one...'),
+            number_format(
+                $total
+            )
+        ),
+        sprintf(
+            _('Over %s pages or enter the new one...'),
+            number_format(
+                $total
+            )
+        ),
+    ]
 );
 
 // Request
@@ -214,7 +252,7 @@ $results = $index->search($q)
     <header>
       <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
         <h1><a href="<?php echo $config->webui->url->base; ?>"><?php echo _('Yo!') ?></a></h1>
-        <input type="text" name="q" placeholder="<?php echo _('request something...') ?>" value="<?php echo htmlentities($q) ?>" />
+        <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="<?php echo htmlentities($q) ?>" />
         <button type="submit"><?php echo _('search'); ?></button>
       </form>
     </header>
