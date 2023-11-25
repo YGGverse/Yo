@@ -87,7 +87,7 @@ php src/cli/document/search.php '@title "*"' [limit]
 Import index from YGGo database
 
 ```
-php src/cli/yggo/import.php 'host' 'port' 'user' 'password' 'database' [unique]
+php src/cli/yggo/import.php 'host' 'port' 'user' 'password' 'database' [unique=off] [start=0] [limit=100]
 ```
 
 Source DB fields required:
@@ -98,3 +98,5 @@ Source DB fields required:
 * `password`
 * `database`
 * `unique` - optional, check for unique URL (takes more time)
+* `start` - optional, offset to start queue
+* `limit` - optional, limit queue

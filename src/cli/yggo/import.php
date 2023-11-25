@@ -60,8 +60,8 @@ catch (Exception $error)
     exit;
 }
 
-$start = 0;
-$limit = 100;
+$start = isset($argv[7]) ? (int) $argv[7] : 0;
+$limit = isset($argv[8]) ? (int) $argv[8] : 100;
 
 $total = $yggo->query('SELECT COUNT(*) AS `total` FROM `hostPage`
 
