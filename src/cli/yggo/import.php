@@ -63,7 +63,12 @@ catch (Exception $error)
 $start = 0;
 $limit = 100;
 
-$total = $yggo->query('SELECT COUNT(*) AS `total` FROM `hostPage` WHERE `httpCode` = 200')->fetch()->total;
+$total = $yggo->query('SELECT COUNT(*) AS `total` FROM `hostPage`
+
+                                                  WHERE `hostPage`.`httpCode` = 200
+                                                    AND `hostPage`.`timeUpdated` IS NOT NULL
+                                                    AND `hostPage`.`mime` IS NOT NULL
+                                                    AND `hostPage`.`size` IS NOT NULL')->fetch()->total;
 
 $processed = 0;
 
