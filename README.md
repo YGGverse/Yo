@@ -79,3 +79,22 @@ php src/cli/document/search.php '@title "*"' [limit]
 ```
 * `query` - required
 * `limit` - optional search results limit
+
+##### Migration
+
+###### YGGo
+
+Import index from YGGo database
+
+```
+php src/cli/yggo/import.php 'host' 'port' 'user' 'password' 'database' [unique]
+```
+
+Source DB fields required:
+
+* `host`
+* `port`
+* `user`
+* `password`
+* `database`
+* `unique` - optional, check for unique URL (takes more time)
