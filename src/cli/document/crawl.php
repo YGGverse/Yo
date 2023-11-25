@@ -252,16 +252,19 @@ foreach($search->get() as $document)
             {
                 foreach (array_unique($documents) as $url)
                 {
-                    $url = trim($url);
+                    $url      = trim($url);
+                    $crc32url = crc32($url);
 
                     if (!$index->search('@url "' . $url . '"')
+                               ->filter('crc32url', $crc32url)
                                ->limit(1)
                                ->get()
                                ->getTotal())
                     {
                         $index->addDocument(
                             [
-                                'url' => $url
+                                'url'      => $url,
+                                'crc32url' => $crc32url
                             ]
                         );
 

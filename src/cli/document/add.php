@@ -23,8 +23,13 @@ $index = $client->index(
     $config->manticore->index->document->name
 );
 
+// Prepare URL
+$url      = trim($argv[1]);
+$crc32url = crc32($url);
+
 // Check URL for exist
-$result = $index->search('@url "' . trim($argv[1]) . '"')
+$result = $index->search('@url "' . $url . '"')
+                ->filter('crc32url', $crc32url)
                 ->limit(1)
                 ->get();
 
@@ -32,7 +37,7 @@ if ($result->getTotal())
 {
     echo sprintf(
         'URL "%s" already exists in "%s" index!' . PHP_EOL,
-        $argv[1],
+        $url,
         $config->manticore->index->document->name
     );
 
@@ -42,13 +47,14 @@ if ($result->getTotal())
 // Add
 $result = $index->addDocument(
     [
-        'url' => trim($argv[1])
+        'url'      => $url,
+        'crc32url' => $crc32url
     ]
 );
 
 echo sprintf(
     'URL "%s" added to "%s" index: %s' . PHP_EOL,
-    $argv[1],
+    $url,
     $config->manticore->index->document->name,
     print_r(
         $result,

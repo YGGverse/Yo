@@ -69,7 +69,7 @@ $placeholder = plural(
 $response = false;
 
 // Request
-$q = !empty($_GET['q']) ? $_GET['q'] : '';
+$q = !empty($_GET['q']) ? trim($_GET['q']) : '';
 $p = !empty($_GET['p']) ? (int) $_GET['p'] : 1;
 
 // Register new URL by request on enabled
@@ -77,20 +77,23 @@ if ($config->webui->search->index->request->url->enabled)
 {
     if (filter_var($q, FILTER_VALIDATE_URL) && preg_match($config->webui->search->index->request->url->regex, $q))
     {
-        $url = trim($q);
+        // Prepare URL
+        $url      = $q;
+        $crc32url = crc32($url);
 
         // Check URL for exist
-        $exist = $index->search('@url "' . trim($url) . '"')
-                        ->limit(1)
-                        ->get()
-                        ->getTotal();
+        $exist = $index->search('@url "' . $url . '"')
+                       ->filter('crc32url', $crc32url)
+                       ->limit(1)
+                       ->get()
+                       ->getTotal();
 
         if ($exist)
         {
             /* disable as regular search request possible
             $response = sprintf(
                 _('URL "%s" exists in search index'),
-                htmlentities($url)
+                htmlentities($q)
             );
             */
         }
@@ -98,36 +101,39 @@ if ($config->webui->search->index->request->url->enabled)
         // Add URL
         else
         {
+            // @TODO check http code
+
             $index->addDocument(
                 [
-                    'url' => trim($url)
+                    'url'      => $url,
+                    'crc32url' => $crc32url
                 ]
             );
 
             $response = sprintf(
                 _('URL "%s" added to the crawl queue!'),
-                htmlentities($url)
+                htmlentities($q)
             );
         }
     }
 }
 
 // Extended syntax corrections
-$query = trim($q);
-
-if (filter_var($q, FILTER_VALIDATE_URL))
+switch (true)
 {
-    $query = '@url "' . $q . '"';
-}
+    case filter_var($q, FILTER_VALIDATE_URL):
 
-elseif (false === strpos($q, '"'))
-{
-    $query = '"' . $q . '"';
+        $query = $index->search('@url "' . $q . '"')->filter('crc32url', crc32($q));
+
+    break;
+
+    default:
+
+        $query = $index->search($q);
 }
 
 // Search request begin
-$results = $index->search($query)
-                 ->offset($p * $config->webui->pagination->limit - $config->webui->pagination->limit)
+$results = $query->offset($p * $config->webui->pagination->limit - $config->webui->pagination->limit)
                  ->limit($config->webui->pagination->limit)
                  ->get();
 

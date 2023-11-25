@@ -79,6 +79,10 @@ $result = $index->create(
         'time' =>
         [
             'type' => 'integer'
+        ],
+        'crc32url' =>
+        [
+            'type' => 'bigint'
         ]
     ],
     (array) $config->manticore->index->document->settings
