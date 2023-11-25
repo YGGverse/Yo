@@ -1,46 +1,37 @@
-# Yo! Micro Web Crawler in PHP & Manticore
+# Yo!
 
-Next generation of [YGGo!](https://github.com/YGGverse/YGGo) project with goal to reduce server requirements and make deployment process simpler
+Micro Web Crawler in PHP & Manticore
 
- - Index model changed to distributed cluster model, and now oriented to aggregate search results from network instances trough API
- - Refactored data exchange model where drop all internal keys dependencies
- - Snaps now using tar.gz compression to reduce storage requirements and still supporting remote mirrors, FTP including
- - Minimalism everywhere
-
-## Implementation
-
-Engine written in PHP 8 and uses [Manticore](https://github.com/manticoresoftware) on backend.
-
-Default build adapted for [Yggdrasil](https://github.com/yggdrasil-network) but could be used to make internet search portal.
+Yo! is the super thin layer for Manticore search server that extends official [manticoresearch-php](https://github.com/manticoresoftware/manticoresearch-php) client with CLI tools and simple JS-less WebUI.
 
 ## Components
 
 * CLI tools for index operations
-* JS-less frontend to make search web portal
+* JS-less frontend to run local or public search web portal
 * API tools to make search index distributed
 
 ## Features
 
-* MIME-based crawler with flexible filter settings
-* Page snap history with local and remote mirrors support
+* MIME-based crawler with flexible filter settings by regular expressions, selectors, external links etc
+* Page snap history with local and remote mirrors support (including FTP protocol)
 
 ### Install
 
-1. Install `composer`, `php` and `manticore`
+1. Install `manticore`, `composer` and `php`
 2. Grab latest `Yo` version `git clone https://github.com/YGGverse/Yo.git`
 3. Run `composer update` inside the project directory
 4. Copy and customize config file `cp example/config.json config.json`
 5. Make sure `storage` folder writable
-6. Run indexes init script `php src/cli/index/init.php`
-7. Add new URL `php src/cli/document/add.php URL`
-8. Run crawler `php src/cli/document/crawl.php`
-9. Get search results `php src/cli/document/search.php '*'`
+6. Run indexes initiation script `php src/cli/index/init.php`
+7. Announce new URL `php src/cli/document/add.php URL`
+8. Run crawler to grab the data `php src/cli/document/crawl.php`
+9. Test search results `php src/cli/document/search.php '*'`
 
 #### Web UI
 
 1. `cd src/webui`
 2. `php -S 127.0.0.1:8080`
-3. now open `127.0.0.1:8080` in your browser!
+3. open `127.0.0.1:8080` in browser
 
 ## Documentation
 
