@@ -214,7 +214,7 @@ $results = $index->search($q)
     <header>
       <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
         <h1><a href="<?php echo $config->webui->url->base; ?>"><?php echo _('Yo!') ?></a></h1>
-        <input type="text" name="q" placeholder="<?php echo _('request') ?>" value="<?php echo htmlentities($q) ?>" />
+        <input type="text" name="q" placeholder="<?php echo _('request something...') ?>" value="<?php echo htmlentities($q) ?>" />
         <button type="submit"><?php echo _('search'); ?></button>
       </form>
     </header>

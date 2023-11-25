@@ -261,7 +261,7 @@ $index = $client->index(
     <header>
       <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
         <h1><?php echo _('Yo!') ?></h1>
-        <input type="text" name="q" placeholder="<?php echo ('request...') ?>" value="" />
+        <input type="text" name="q" placeholder="<?php echo ('request something...') ?>" value="" />
         <button type="submit"><?php echo _('search') ?></button>
       </form>
     </header>
