@@ -66,12 +66,67 @@ $placeholder = plural(
     ]
 );
 
+$response = false;
+
 // Request
 $q = !empty($_GET['q']) ? $_GET['q'] : '';
 $p = !empty($_GET['p']) ? (int) $_GET['p'] : 1;
 
-// Check URL for exist
-$results = $index->search($q)
+// Register new URL by request on enabled
+if ($config->webui->search->index->request->url->enabled)
+{
+    if (filter_var($q, FILTER_VALIDATE_URL) && preg_match($config->webui->search->index->request->url->regex, $q))
+    {
+        $url = trim($q);
+
+        // Check URL for exist
+        $exist = $index->search('@url "' . trim($url) . '"')
+                        ->limit(1)
+                        ->get()
+                        ->getTotal();
+
+        if ($exist)
+        {
+            /* disable as regular search request possible
+            $response = sprintf(
+                _('URL "%s" exists in search index'),
+                htmlentities($url)
+            );
+            */
+        }
+
+        // Add URL
+        else
+        {
+            $index->addDocument(
+                [
+                    'url' => trim($url)
+                ]
+            );
+
+            $response = sprintf(
+                _('URL "%s" added to the crawl queue!'),
+                htmlentities($url)
+            );
+        }
+    }
+}
+
+// Extended syntax corrections
+$query = trim($q);
+
+if (filter_var($q, FILTER_VALIDATE_URL))
+{
+    $query = '@url "' . $q . '"';
+}
+
+if (false === strpos($q, '"'))
+{
+    $query = '"' . $q . '"';
+}
+
+// Search request begin
+$results = $index->search($query)
                  ->offset($p * $config->webui->pagination->limit - $config->webui->pagination->limit)
                  ->limit($config->webui->pagination->limit)
                  ->get();
@@ -257,6 +312,9 @@ $results = $index->search($q)
       </form>
     </header>
     <main>
+      <?php if ($response) { ?>
+        <div><?php echo $response ?></div>
+      <?php } ?>
       <?php if ($results->getTotal()) { ?>
         <?php foreach ($results as $result) { ?>
           <div>

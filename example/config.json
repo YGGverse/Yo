@@ -20,6 +20,19 @@
         "pagination":
         {
             "limit":20
+        },
+        "search":
+        {
+            "index":
+            {
+                "request":
+                {
+                    "url":{
+                        "enabled":false,
+                        "regex":"/.*/ui"
+                    }
+                }
+            }
         }
     },
     "cli":
