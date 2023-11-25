@@ -100,3 +100,9 @@ Source DB fields required:
 * `unique` - optional, check for unique URL (takes more time)
 * `start` - optional, offset to start queue
 * `limit` - optional, limit queue
+
+## Instances
+
+### Yggdrasil
+
+* `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/`
