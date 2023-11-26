@@ -136,7 +136,8 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
 
                         header(
                             sprintf(
-                                'Content-Disposition: filename="%s"',
+                                'Content-Disposition: filename="snap.%s.%s"',
+                                $_GET['md5url'],
                                 basename(
                                     $filename
                                 )
