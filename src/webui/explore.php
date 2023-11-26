@@ -76,6 +76,61 @@ $icon = $identicon->getImageDataUri('webp');
 // Get snaps info
 $snaps = [];
 
+/// Prepare location
+$md5url = md5($document->url);
+
+$filepath = implode(
+  '/',
+  str_split(
+      $md5url
+  )
+);
+
+/// Local snaps @TODO
+
+/// Remote snaps
+foreach ($config->snap->storage->remote->ftp as $i => $ftp)
+{
+  // Resource enabled
+  if (!$ftp->enabled)
+  {
+      continue;
+  }
+
+  $remote = new \Yggverse\Ftp\Client();
+
+  $connection = $remote->connect(
+    $ftp->connection->host,
+    $ftp->connection->port,
+    $ftp->connection->username,
+    $ftp->connection->password,
+    $ftp->connection->directory,
+    $ftp->connection->timeout,
+    $ftp->connection->passive
+  );
+
+  // Remote host connected
+  if ($connection) {
+
+    foreach ((array) $remote->nlist($filepath) as $filename)
+    {
+      $basename = basename($filename);
+      $time = preg_replace('/\D/', '', $basename);
+
+      $snaps[sprintf(_('Remote #%s'), $i + 1)][] = (object)
+      [
+        'source' => $i,
+        'md5url' => $md5url,
+        'name'   => $basename,
+        'time'   => $time,
+        'size'   => $remote->size($filename),
+      ];
+    }
+
+    $remote->close();
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -156,6 +211,13 @@ $snaps = [];
         margin: 4px 0;
       }
 
+      h4 {
+        display: block;
+        font-size: 13px;
+        font-weight: normal;
+        margin: 4px 0;
+      }
+
       form {
         display: block;
         max-width: 678px;
@@ -226,6 +288,15 @@ $snaps = [];
         color: #54a3f7;
       }
 
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul > li {
+        margin-left: 16px;
+      }
+
       .text-warning {
         color: #db6161;
       }
@@ -249,7 +320,7 @@ $snaps = [];
     <main>
       <?php if ($document) { ?>
         <div>
-          <?php if (empty($document->title) && empty($document->description) && empty($document->keywords)) { ?>
+          <?php if (empty($document->time) || (empty($document->title) && empty($document->description) && empty($document->keywords))) { ?>
             <div>
               <?php echo _('Document pending for crawler queue') ?>
             </div>
@@ -304,12 +375,17 @@ $snaps = [];
           <?php } ?>
           <?php if ($snaps) { ?>
             <h3><?php echo _('Snaps') ?></h3>
-            <?php foreach ($snaps as $server => $snap) { ?>
-              <div>
-                <!--<a href="<?php echo WEBSITE_DOMAIN . '/api.php?action=snap&method=download&time=url=' . $url ?>">-->
-                  <?php echo date('c', $snap->time) ?> / <?php echo $snap->time ?>
-                <!--</a>-->
-              </div>
+            <?php foreach ($snaps as $source => $snap) { ?>
+              <h4><?php echo $source ?></h4>
+              <ul>
+                <?php foreach ($snap as $file) { ?>
+                  <li>
+                    <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
+                      <?php echo sprintf('%s (tar.gz / %s bytes)', date('c', $file->time), number_format($file->size)) ?>
+                    </a>
+                  </li>
+                <?php } ?>
+              </ul>
             <?php } ?>
           <?php } ?>
         </div>
