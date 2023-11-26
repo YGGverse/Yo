@@ -143,12 +143,38 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         top: 0;
         left: 0;
         right: 0;
+        z-index: 2;
       }
 
       main {
-        margin-top: 110px;
+        margin-top: 80px;
         margin-bottom: 76px;
-        padding: 0 20px;
+        padding: 0 32px;
+      }
+
+      main > div {
+        border-top: 1px #000 dashed;
+        font-size: 14px;
+        margin: 0 auto;
+        max-width: 620px;
+        padding: 8px 0;
+        position: relative;
+      }
+
+      main > div > img {
+        left: -24px;
+        position: absolute;
+        top: 18px;
+
+      }
+
+      main > div > div {
+        padding: 8px 0;
+        line-height: 16px;
+      }
+
+      main > div > div > a {
+        font-size: 12px;
       }
 
       h1 {
@@ -170,9 +196,8 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
 
       h2 {
         display: block;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: normal;
-        margin: 4px 0;
         color: #fff;
       }
 
@@ -238,31 +263,10 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
 
       a, a:visited, a:active {
         color: #9ba2ac;
-        font-size: 12px;
-        margin-top: 8px;
       }
 
       a:hover {
         color: #54a3f7;
-      }
-
-      img.icon {
-        float: left;
-        border-radius: 50%;
-        margin-right: 8px;
-      }
-
-      img.image {
-        max-width: 100%;
-        border-radius: 3px;
-      }
-
-      div {
-        max-width: 640px;
-        margin: 0 auto;
-        padding: 16px 0;
-        border-top: 1px #000 dashed;
-        font-size: 14px
       }
 
       span {
@@ -273,10 +277,6 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       p {
         margin: 16px 0;
         text-align: right;
-        font-size: 11px;
-      }
-
-      p > a, p > a:visited, p > a:active {
         font-size: 11px;
       }
 
@@ -297,8 +297,6 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
               </svg>
             </sub>
-            &nbsp;
-            <?php echo _('Search'); ?>
         </button>
       </form>
     </header>
@@ -306,59 +304,62 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       <?php if ($response) { ?>
         <div><?php echo $response ?></div>
       <?php } ?>
-      <?php if ($results->getTotal()) { ?>
-        <?php foreach ($results as $result) { ?>
-          <div>
-            <?php if (!empty($result->url)) { ?>
+      <div><?php echo sprintf(_('Found: %s'), number_format($results->getTotal())) ?></div>
+      <?php foreach ($results as $result) { ?>
+        <div>
+          <?php
+
+            $hostname = parse_url(
+              $result->url,
+              PHP_URL_HOST
+            );
+
+            $identicon = new \Jdenticon\Identicon();
+
+            $identicon->setValue(
+                $hostname
+            );
+
+            $identicon->setSize(14);
+
+            $identicon->setStyle(
+              [
+                'backgroundColor' => 'rgba(255, 255, 255, 0)',
+                'padding' => 0
+              ]
+            );
+
+            $icon = $identicon->getImageDataUri('webp');
+
+          ?>
+          <img src="<?php echo $icon ?>" title="<?php echo $hostname ?>" alt="identicon" />
+          <?php if (!empty($result->title)) { ?>
+            <div>
               <h2><?php echo $result->title ?></h2>
-            <?php } ?>
-            <?php if (!empty($result->description)) { ?>
-              <span><?php echo $result->description ?></span>
-            <?php } ?>
-            <?php if (!empty($result->keywords)) { ?>
-              <span><?php echo $result->keywords ?></span>
-            <?php } ?>
-            <a href="<?php echo $result->url ?>">
-              <?php
-                $identicon = new \Jdenticon\Identicon();
-
-                $identicon->setValue(
-                    parse_url(
-                      $result->url,
-                      PHP_URL_HOST
-                    )
-                );
-
-                $identicon->setSize(16);
-
-                $identicon->setStyle(
-                  [
-                    'backgroundColor' => 'rgba(255, 255, 255, 0)',
-                    'padding' => 0
-                  ]
-                );
-              ?>
-              <img src="<?php echo $identicon->getImageDataUri('webp') ?>" alt="identicon" width="16" height="16" class="icon" />
-              <?php echo htmlentities(urldecode($result->url)) ?>
-            </a>
-            <!-- @TODO
-            |
-            <a href="<?php echo $config->webui->url->base; ?>/snap">
-              <?php echo _('cache'); ?>
-            </a>
-            -->
+            </div>
+          <?php } ?>
+          <?php if (!empty($result->description)) { ?>
+            <div><?php echo $result->description ?></div>
+          <?php } ?>
+          <?php if (!empty($result->keywords)) { ?>
+            <div>
+              <?php echo $result->keywords ?>
+            </div>
+          <?php } ?>
+          <div>
+            <a href="<?php echo $result->url ?>"><?php echo htmlentities(urldecode($result->url)) ?></a>
+            <small>&bull;</small>
+            <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/explore.php?i=<?php echo $result->getId() ?>"><?php echo _('explore') ?></a>
           </div>
-        <?php } ?>
-        <?php if ($p * $config->webui->pagination->limit <= $results->getTotal()) { ?>
+        </div>
+      <?php } ?>
+      <?php if ($p * $config->webui->pagination->limit <= $results->getTotal()) { ?>
+        <div>
           <div>
             <a href="<?php echo $config->webui->url->base; ?>/search.php?q=<?php echo urlencode(htmlentities($q)) ?>&p=<?php echo $p + 1 ?>">
-              <?php echo _('Next page') ?>
+              <?php echo _('More') ?>
             </a>
           </div>
-        <?php } ?>
-      <?php } else { ?>
-        <div>
-          <?php echo _('Nothing found!') ?>
         </div>
       <?php } ?>
     </main>
