@@ -20,7 +20,7 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 * [Symfony CSS selector](https://github.com/symfony/css-selector)
 * [FTP client for snap mirrors](https://github.com/YGGverse/ftp-php)
 * [Hostname ident icons](https://github.com/dmester/jdenticon-php)
-* [SVG icons by Boostrap](https://icons.getbootstrap.com/)
+* [Bootstrap icons](https://icons.getbootstrap.com/)
 
 ### Install
 
