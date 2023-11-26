@@ -119,7 +119,7 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
 <!DOCTYPE html>
 <html lang="<?php echo _('en-US'); ?>">
   <head>
-  <title><?php echo sprintf(_('%s - YGGo!'), htmlentities($q)) ?></title>
+  <title><?php echo sprintf(_('Yo! %s'), htmlentities($q)) ?></title>
     <meta charset="utf-8" />
     <meta name="keywords" content="<?php echo htmlentities($q) ?>" />
     <style>
