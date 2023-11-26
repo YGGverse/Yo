@@ -255,7 +255,7 @@ foreach($search->get() as $document)
                     $url      = trim($url);
                     $crc32url = crc32($url);
 
-                    if (!$index->search('@url "' . $url . '"')
+                    if (!$index->search('')
                                ->filter('crc32url', $crc32url)
                                ->limit(1)
                                ->get()

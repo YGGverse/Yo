@@ -59,11 +59,11 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
     $crc32url = crc32($url);
 
     // Check URL for exist
-    $exist = $index->search('@url "' . $url . '"')
-                    ->filter('crc32url', $crc32url)
-                    ->limit(1)
-                    ->get()
-                    ->getTotal();
+    $exist = $index->search('')
+                   ->filter('crc32url', $crc32url)
+                   ->limit(1)
+                   ->get()
+                   ->getTotal();
 
     if ($exist)
     {
@@ -107,7 +107,7 @@ switch (true)
 {
     case filter_var($q, FILTER_VALIDATE_URL):
 
-        $query = $index->search('@url "' . $q . '"')->filter('crc32url', crc32($q));
+        $query = $index->search('')->filter('crc32url', crc32($q));
 
     break;
 

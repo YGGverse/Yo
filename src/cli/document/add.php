@@ -28,7 +28,7 @@ $url      = trim($argv[1]);
 $crc32url = crc32($url);
 
 // Check URL for exist
-$result = $index->search('@url "' . $url . '"')
+$result = $index->search('')
                 ->filter('crc32url', $crc32url)
                 ->limit(1)
                 ->get();

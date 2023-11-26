@@ -127,7 +127,7 @@ for ($i = 0; $i <= $total; $i++)
         // Check for unique URL requested
         if (isset($argv[6]))
         {
-            $local = $index->search('@url "' . trim($url) . '"')
+            $local = $index->search('')
                            ->filter('crc32url', $crc32url)
                            ->limit(1)
                            ->get();
