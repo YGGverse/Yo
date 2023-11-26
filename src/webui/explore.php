@@ -221,7 +221,6 @@ $snaps = [];
         color: #9ba2ac;
         display: inline-block;
         font-size: 12px;
-        margin-top: 8px;
       }
 
       a:hover {
