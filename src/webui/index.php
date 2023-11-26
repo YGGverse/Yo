@@ -85,7 +85,7 @@ $placeholder = sprintf(
       input {
         width: 100%;
         margin: 8px 0;
-        padding: 12px 0;
+        padding: 12px;
         border-radius: 32px;
         background-color: #000;
         color: #fff;
@@ -108,7 +108,7 @@ $placeholder = sprintf(
 
       button {
         margin: 22px 0;
-        padding: 6px 16px;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
         background-color: #3394fb;
@@ -275,7 +275,15 @@ $placeholder = sprintf(
       <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
         <h1><?php echo _('Yo!') ?></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="" />
-        <button type="submit"><?php echo _('search') ?></button>
+        <button type="submit">
+          <sub>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </sub>
+          &nbsp;
+          <?php echo _('Search'); ?>
+        </button>
       </form>
     </header>
     <!-- css animation : begin -->
