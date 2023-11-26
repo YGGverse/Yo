@@ -15,13 +15,12 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 ## Components
 
 * [Manticore Server](https://github.com/manticoresoftware/manticoresearch)
-* [PHP Library for Manticore](https://github.com/manticoresoftware/manticoresearch-php)
-* [Boostrap Icons](https://icons.getbootstrap.com/)
-* [Hostname ident icons](https://github.com/dmester/jdenticon-php)
-* [Dom crawler](https://github.com/symfony/dom-crawler)
-* [CSS selector](https://github.com/symfony/css-selector)
+* [PHP library for Manticore](https://github.com/manticoresoftware/manticoresearch-php)
+* [Symfony DOM crawler](https://github.com/symfony/dom-crawler)
+* [Symfony CSS selector](https://github.com/symfony/css-selector)
 * [FTP client for snap mirrors](https://github.com/YGGverse/ftp-php)
-
+* [Hostname ident icons](https://github.com/dmester/jdenticon-php)
+* [SVG icons by Boostrap](https://icons.getbootstrap.com/)
 
 ### Install
 
