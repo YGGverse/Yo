@@ -38,11 +38,11 @@ $total = $index->search('')
                ->getTotal();
 
 $placeholder = sprintf(
-    _('index contain %s documents %s'),
+    _('Search in %s documents %s'),
     number_format(
         $total
     ),
-    $config->webui->search->index->request->url->enabled ? _('or crawl new address...') : false
+    $config->webui->search->index->request->url->enabled ? _('or enter new address to crawl...') : false
 );
 
 ?>
