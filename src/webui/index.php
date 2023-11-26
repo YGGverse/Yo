@@ -85,7 +85,7 @@ $placeholder = sprintf(
       input {
         width: 100%;
         margin: 8px 0;
-        padding: 12px;
+        padding: 12px 0;
         border-radius: 32px;
         background-color: #000;
         color: #fff;

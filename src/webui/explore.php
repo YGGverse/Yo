@@ -123,12 +123,12 @@ $snaps = [];
 
       main > div > div {
         margin: 8px 0;
-        font-size: 12px;
+        font-size: 13px;
       }
 
       h1 {
         position: fixed;
-        top: 8px;
+        top: 2px;
         left: 24px;
       }
 
@@ -138,8 +138,7 @@ $snaps = [];
       h1 > a:hover {
         color: #fff;
         font-weight: normal;
-        font-size: 24px;
-        margin: 10px 0;
+        font-size: 22px;
         text-decoration: none;
       }
 
