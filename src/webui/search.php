@@ -215,7 +215,7 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         border-radius: 32px;
         background-color: #000;
         color: #fff;
-        font-size: 16px;
+        font-size: 15px;
         text-align: center;
       }
 
