@@ -50,49 +50,56 @@ $q = !empty($_GET['q']) ? trim($_GET['q']) : '';
 $p = !empty($_GET['p']) ? (int) $_GET['p'] : 1;
 
 // Register new URL by request on enabled
-if ($config->webui->search->index->request->url->enabled)
+if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTER_VALIDATE_URL))
 {
-    if (filter_var($q, FILTER_VALIDATE_URL) && preg_match($config->webui->search->index->request->url->regex, $q))
+  if (preg_match($config->webui->search->index->request->url->regex, $q))
+  {
+    // Prepare URL
+    $url      = $q;
+    $crc32url = crc32($url);
+
+    // Check URL for exist
+    $exist = $index->search('@url "' . $url . '"')
+                    ->filter('crc32url', $crc32url)
+                    ->limit(1)
+                    ->get()
+                    ->getTotal();
+
+    if ($exist)
     {
-        // Prepare URL
-        $url      = $q;
-        $crc32url = crc32($url);
-
-        // Check URL for exist
-        $exist = $index->search('@url "' . $url . '"')
-                       ->filter('crc32url', $crc32url)
-                       ->limit(1)
-                       ->get()
-                       ->getTotal();
-
-        if ($exist)
-        {
-            /* disable as regular search request possible
-            $response = sprintf(
-                _('URL "%s" exists in search index'),
-                htmlentities($q)
-            );
-            */
-        }
-
-        // Add URL
-        else
-        {
-            // @TODO check http code
-
-            $index->addDocument(
-                [
-                    'url'      => $url,
-                    'crc32url' => $crc32url
-                ]
-            );
-
-            $response = sprintf(
-                _('URL "%s" added to the crawl queue!'),
-                htmlentities($q)
-            );
-        }
+        /* disable as regular search request possible
+        $response = sprintf(
+            _('URL "%s" exists in search index'),
+            htmlentities($q)
+        );
+        */
     }
+
+    // Add URL
+    else
+    {
+      // @TODO check http code
+
+      $index->addDocument(
+        [
+          'url'      => $url,
+          'crc32url' => $crc32url
+        ]
+      );
+
+      $response = sprintf(
+        _('URL "%s" added to the crawl queue!'),
+        htmlentities($q)
+      );
+    }
+  }
+
+  else {
+    $response = sprintf(
+      _('URL "%s" does not match node settings!'),
+      htmlentities($q)
+    );
+  }
 }
 
 // Extended syntax corrections
