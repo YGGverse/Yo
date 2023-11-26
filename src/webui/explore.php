@@ -113,6 +113,19 @@ $snaps = [];
         padding: 0 20px;
       }
 
+      main > div {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 8px 0;
+        border-top: 1px #000 dashed;
+        font-size: 14px;
+      }
+
+      main > div > div {
+        margin: 8px 0;
+        font-size: 12px;
+      }
+
       h1 {
         position: fixed;
         top: 8px;
@@ -215,23 +228,6 @@ $snaps = [];
         color: #54a3f7;
       }
 
-      div {
-        max-width: 640px;
-        margin: 0 auto;
-        padding: 16px 0;
-        border-top: 1px #000 dashed;
-        font-size: 14px;
-      }
-
-      p {
-        margin: 16px 0;
-        font-size: 12px;
-      }
-
-      p > a, p > a:visited, p > a:active {
-        font-size: 12px;
-      }
-
       .text-warning {
         color: #db6161;
       }
@@ -256,62 +252,72 @@ $snaps = [];
       <?php if ($document) { ?>
         <div>
           <?php if (empty($document->title) && empty($document->description) && empty($document->keywords)) { ?>
-            <?php echo _('Document pending for crawler queue') ?>
+            <div>
+              <?php echo _('Document pending for crawler queue') ?>
+            </div>
           <?php } else { ?>
             <?php if (!empty($document->title)) { ?>
-              <h2><?php echo htmlentities($document->title) ?></h2>
+              <h2>
+                <?php echo htmlentities($document->title) ?>
+              </h2>
             <?php } ?>
             <?php if (!empty($document->description)) { ?>
-              <span><?php echo htmlentities($document->description) ?></span>
+              <div>
+                <?php echo htmlentities($document->description) ?>
+              </div>
             <?php } ?>
             <?php if (!empty($document->keywords)) { ?>
-              <span><?php echo htmlentities($document->keywords) ?></span>
+              <div>
+                <?php echo htmlentities($document->keywords) ?>
+              </div>
             <?php } ?>
           <?php } ?>
-          <span>
-            <a href="<?php echo $document->url ?>"><?php echo htmlentities(urldecode($document->url)) ?></a>
-          </span>
+            <div>
+              <a href="<?php echo $document->url ?>"><?php echo htmlentities(urldecode($document->url)) ?></a>
+            </div>
         </div>
         <div>
-          <p>
+          <div>
             <img src="<?php echo $icon ?>" title="<?php echo $hostname ?>" alt="identicon" />
-          </p>
+          </div>
           <?php if (!empty($document->code)) { ?>
             <h3><?php echo _('HTTP') ?></h3>
             <?php if ($document->code == 200) { ?>
-              <p><?php echo $document->code ?></p>
-            <?php } else { ?>
-              <p class="text-warning">
+              <div>
                 <?php echo $document->code ?>
-              </p>
+              </div>
+            <?php } else { ?>
+              <div class="text-warning">
+                <?php echo $document->code ?>
+              </div>
             <?php } ?>
           <?php } ?>
           <?php if (!empty($document->mime)) { ?>
             <h3><?php echo _('MIME') ?></h3>
-            <p><?php echo $document->mime ?></p>
+            <div><?php echo $document->mime ?></div>
           <?php } ?>
           <?php if (!empty($document->size)) { ?>
             <h3><?php echo _('Size') ?></h3>
-            <p><?php echo $document->size ?></p>
+            <div><?php echo $document->size ?></div>
           <?php } ?>
           <?php if (!empty($document->time)) { ?>
             <h3><?php echo _('Time') ?></h3>
-            <p><?php echo date('c', $document->time) ?> / <?php echo $document->time ?></p>
+            <div><?php echo date('c', $document->time) ?> / <?php echo $document->time ?></div>
           <?php } ?>
           <?php if ($snaps) { ?>
             <h3><?php echo _('Snaps') ?></h3>
             <?php foreach ($snaps as $server => $snap) { ?>
-              <p>
+              <div>
                 <!--<a href="<?php echo WEBSITE_DOMAIN . '/api.php?action=snap&method=download&time=url=' . $url ?>">-->
                   <?php echo date('c', $snap->time) ?> / <?php echo $snap->time ?>
                 <!--</a>-->
-              </p>
+              </div>
             <?php } ?>
           <?php } ?>
         </div>
       <?php } else { ?>
-        <div style="text-align:center">
-          <span><?php echo _('URL not found') ?></span>
+        <div>
+          <?php echo _('Index not found') ?>
         </div>
       <?php } ?>
     </main>
