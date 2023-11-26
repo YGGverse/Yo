@@ -4,16 +4,24 @@ Micro Web Crawler in PHP & Manticore
 
 Yo! is the super thin layer for Manticore search server that extends official [manticoresearch-php](https://github.com/manticoresoftware/manticoresearch-php) client with CLI tools and simple JS-less WebUI.
 
-## Components
-
-* CLI tools for index operations
-* JS-less frontend to run local or public search web portal
-* API tools to make search index distributed
-
 ## Features
 
 * MIME-based crawler with flexible filter settings by regular expressions, selectors, external links etc
 * Page snap history with local and remote mirrors support (including FTP protocol)
+* CLI tools for index administration and crontab tasks
+* JS-less frontend to run local or public search web portal
+* API tools to make search index distributed
+
+## Components
+
+* [Manticore Server](https://github.com/manticoresoftware/manticoresearch)
+* [PHP Library for Manticore](https://github.com/manticoresoftware/manticoresearch-php)
+* [Boostrap Icons](https://icons.getbootstrap.com/)
+* [Hostname ident icons](https://github.com/dmester/jdenticon-php)
+* [Dom crawler](https://github.com/symfony/dom-crawler)
+* [CSS selector](https://github.com/symfony/css-selector)
+* [FTP client for snap mirrors](https://github.com/YGGverse/ftp-php)
+
 
 ### Install
 
