@@ -371,7 +371,7 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
           <?php } ?>
           <?php if (!empty($document->time)) { ?>
             <h3><?php echo _('Time') ?></h3>
-            <div><?php echo date('c', $document->time) ?> / <?php echo $document->time ?></div>
+            <div><?php echo date('c', $document->time) ?></div>
           <?php } ?>
           <?php if ($snaps) { ?>
             <h3><?php echo _('Snaps') ?></h3>
