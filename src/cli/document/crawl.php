@@ -416,8 +416,8 @@ foreach($search->get() as $document)
                     }
                 }
 
-                // Copy to FTP mirror storage on enabled
-                foreach ($config->snap->storage->mirror->ftp as $ftp)
+                // Copy to FTP storage on enabled
+                foreach ($config->snap->storage->remote->ftp as $ftp)
                 {
                     // Resource enabled
                     if (!$ftp->enabled)
