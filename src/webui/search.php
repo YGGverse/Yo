@@ -8,13 +8,6 @@ error_reporting(E_ALL);
 // Load dependencies
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-function plural(int $number, array $texts)
-{
-    $cases = [2, 0, 1, 1, 1, 2];
-
-    return $texts[(($number % 100) > 4 && ($number % 100) < 20) ? 2 : $cases[min($number % 10, 5)]];
-}
-
 // Init config
 $config = json_decode(
     file_get_contents(
@@ -42,28 +35,12 @@ $total = $index->search('')
                ->get()
                ->getTotal();
 
-$placeholder = plural(
-    $total,
-    [
-        sprintf(
-            _('Over %s page or enter the new one...'),
-            number_format(
-                $total
-            )
-        ),
-        sprintf(
-            _('Over %s pages or enter the new one...'),
-            number_format(
-                $total
-            )
-        ),
-        sprintf(
-            _('Over %s pages or enter the new one...'),
-            number_format(
-                $total
-            )
-        ),
-    ]
+$placeholder = sprintf(
+    _('index contain %s documents %s'),
+    number_format(
+        $total
+    ),
+    $config->webui->search->index->request->url->enabled ? _('or crawl new address...') : false
 );
 
 $response = false;
