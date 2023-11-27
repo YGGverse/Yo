@@ -1,9 +1,9 @@
 <?php
 
 // Debug
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
+# ini_set('display_errors', '1');
+# ini_set('display_startup_errors', '1');
+# error_reporting(E_ALL);
 
 // Load dependencies
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -117,7 +117,7 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
       $basename = basename($filename);
       $time = preg_replace('/\D/', '', $basename);
 
-      $snaps[sprintf(_('Remote #%s'), $i + 1)][] = (object)
+      $snaps[sprintf(_('Server #%s'), $i + 1)][] = (object)
       [
         'source' => $i,
         'md5url' => $md5url,
@@ -211,13 +211,6 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
         margin: 4px 0;
       }
 
-      h4 {
-        display: block;
-        font-size: 13px;
-        font-weight: normal;
-        margin: 4px 0;
-      }
-
       form {
         display: block;
         max-width: 678px;
@@ -295,6 +288,8 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
 
       ul > li {
         margin-left: 16px;
+        font-size: 13px;
+        padding: 4px 0;
       }
 
       .text-warning {
@@ -375,18 +370,22 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
           <?php } ?>
           <?php if ($snaps) { ?>
             <h3><?php echo _('Snaps') ?></h3>
-            <?php foreach ($snaps as $source => $snap) { ?>
-              <h4><?php echo $source ?></h4>
-              <ul>
-                <?php foreach ($snap as $file) { ?>
-                  <li>
-                    <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
-                      <?php echo sprintf('%s (tar.gz / %s bytes)', date('c', $file->time), number_format($file->size)) ?>
-                    </a>
-                  </li>
-                <?php } ?>
-              </ul>
-            <?php } ?>
+            <ul>
+              <?php foreach ($snaps as $source => $snap) { ?>
+                <li>
+                  <?php echo $source ?>
+                  <ul>
+                    <?php foreach ($snap as $file) { ?>
+                      <li>
+                        <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
+                          <?php echo sprintf('%s (tar.gz / %s bytes)', date('c', $file->time), number_format($file->size)) ?>
+                        </a>
+                      </li>
+                    <?php } ?>
+                  </ul>
+                </li>
+              <?php } ?>
+            </ul>
           <?php } ?>
         </div>
       <?php } else { ?>
