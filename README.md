@@ -70,6 +70,15 @@ php src/cli/document/add.php URL
 php src/cli/document/crawl.php
 ```
 
+##### Clean
+
+```
+php src/cli/document/clean.php
+```
+
+* remove `url` duplicates
+* make index optimization
+
 ##### Search
 
 ```
