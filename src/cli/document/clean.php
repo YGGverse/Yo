@@ -1,5 +1,8 @@
 <?php
 
+// Prevent multi-thread execution
+$semaphore = sem_get(crc32('yo.cli.document.clean'), 1);
+
 // Load dependencies
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
