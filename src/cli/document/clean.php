@@ -3,6 +3,11 @@
 // Prevent multi-thread execution
 $semaphore = sem_get(crc32('yo.cli.document.clean'), 1);
 
+if (false === sem_acquire($semaphore, true))
+{
+  exit ('process execution locked by another thread!' . PHP_EOL);
+}
+
 // Load dependencies
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
