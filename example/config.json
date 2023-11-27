@@ -51,6 +51,20 @@
         {
             "crawl":
             {
+                "curl":
+                {
+                    "connection":
+                    {
+                        "timeout":3
+                    },
+                    "download":
+                    {
+                        "size":
+                        {
+                            "max":10000024
+                        }
+                    }
+                },
                 "queue":
                 {
                     "limit":1,

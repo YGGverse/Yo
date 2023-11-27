@@ -18,6 +18,12 @@ $config = json_decode(
     )
 );
 
+// Set global options
+define(
+    'CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX',
+    $config->cli->document->crawl->curl->download->size->max
+);
+
 // Init client
 $client = new \Manticoresearch\Client(
     [
@@ -57,6 +63,13 @@ $index = $client->index(
 // Begin queue
 foreach($search->get() as $document)
 {
+    // Debug target
+    echo sprintf(
+        'index "%s" in "%s"' . PHP_EOL,
+        $document->get('url'),
+        $config->manticore->index->document->name
+    );
+
     // Update index time
     $index->updateDocument(
         [
@@ -70,12 +83,46 @@ foreach($search->get() as $document)
         $document->get('url')
     );
 
+    // Drop URL with long response
+    curl_setopt(
+        $request,
+        CURLOPT_CONNECTTIMEOUT,
+        $config->cli->document->crawl->curl->connection->timeout
+    );
+
+    curl_setopt(
+        $request,
+        CURLOPT_TIMEOUT,
+        $config->cli->document->crawl->curl->connection->timeout
+    );
+
+    // Prevent huge content download e.g. media streams URL
     curl_setopt(
         $request,
         CURLOPT_RETURNTRANSFER,
         true
     );
 
+    curl_setopt(
+        $request,
+        CURLOPT_NOPROGRESS,
+        false
+    );
+
+    curl_setopt(
+        $request,
+        CURLOPT_PROGRESSFUNCTION,
+        function(
+            $download,
+            $downloaded,
+            $upload,
+            $uploaded
+        ) {
+            return $downloaded > CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX ? 1 : 0;
+        }
+    );
+
+    // Begin request
     if ($response = curl_exec($request))
     {
         // Update HTTP code
