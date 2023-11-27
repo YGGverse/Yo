@@ -51,6 +51,10 @@ $search->sort(
     'asc'
 );
 
+$search->sort( // randomize new pages queue
+    'RAND()'
+);
+
 $search->limit(
     $config->cli->document->crawl->queue->limit
 );
