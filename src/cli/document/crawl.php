@@ -73,6 +73,7 @@ foreach($search->get() as $document)
     $data =
     [
         'url'         => $document->get('url'),
+        'crc32url'    => $document->get('crc32url'),
         'title'       => $document->get('title'),
         'description' => $document->get('description'),
         'keywords'    => $document->get('keywords'),
