@@ -73,7 +73,8 @@ foreach($search->get() as $document)
     // Update index time
     $index->updateDocument(
         [
-            'time' => time()
+            'time' => time(),
+            'code' => 404
         ],
         $document->getId()
     );
