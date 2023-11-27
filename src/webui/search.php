@@ -116,6 +116,9 @@ switch (true)
         $query = $index->search($q);
 }
 
+// Get found
+$found = empty($q) ? $total : $query->get()->getTotal();
+
 // Search request begin
 $results = $query->offset($p * $config->webui->pagination->limit - $config->webui->pagination->limit)
                  ->limit($config->webui->pagination->limit)
@@ -311,7 +314,7 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       <?php if ($response) { ?>
         <div><?php echo $response ?></div>
       <?php } ?>
-      <div><?php echo sprintf(_('Found: %s'), number_format($results->getTotal())) ?></div>
+      <div><?php echo sprintf(_('Found: %s'), number_format($found)) ?></div>
       <?php foreach ($results as $result) { ?>
         <div>
           <?php
