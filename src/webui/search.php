@@ -105,6 +105,12 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
 // Extended syntax corrections
 switch (true)
 {
+    case empty($q):
+
+        $query = $index->search('')->sort('RAND()');
+
+    break;
+
     case filter_var($q, FILTER_VALIDATE_URL):
 
         $query = $index->search('')->filter('crc32url', crc32($q));
