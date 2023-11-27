@@ -67,6 +67,21 @@ $index = $client->index(
 // Begin queue
 foreach($search->get() as $document)
 {
+    // Define data
+    $time = time();
+
+    $data =
+    [
+        'url'         => $document->get('url'),
+        'title'       => $document->get('title'),
+        'description' => $document->get('description'),
+        'keywords'    => $document->get('keywords'),
+        'code'        => $document->get('code'),
+        'size'        => $document->get('size'),
+        'mime'        => $document->get('mime'),
+        'time'        => $time
+    ];
+
     // Debug target
     echo sprintf(
         'index "%s" in "%s"' . PHP_EOL,
@@ -74,7 +89,7 @@ foreach($search->get() as $document)
         $config->manticore->index->document->name
     );
 
-    // Update index time
+    // Update index time anyway and set reset code to 404
     $index->updateDocument(
         [
             'time' => time(),
@@ -130,39 +145,24 @@ foreach($search->get() as $document)
     // Begin request
     if ($response = curl_exec($request))
     {
-        // Update HTTP code
+        // Update HTTP code or skip on empty
         if ($code = curl_getinfo($request, CURLINFO_HTTP_CODE))
         {
-            $index->updateDocument(
-                [
-                    'code' => $code
-                ],
-                $document->getId()
-            );
+            $data['code'] = $code;
 
         } else continue;
 
-        // Update size
+        // Update size or skip on empty
         if ($size = curl_getinfo($request, CURLINFO_SIZE_DOWNLOAD))
         {
-            $index->updateDocument(
-                [
-                    'size' => $size
-                ],
-                $document->getId()
-            );
+            $data['size'] = $size;
 
         } else continue;
 
-        // Update MIME type
+        // Update MIME type or skip on empty
         if ($mime = curl_getinfo($request, CURLINFO_CONTENT_TYPE))
         {
-            $index->updateDocument(
-                [
-                    'mime' => $mime
-                ],
-                $document->getId()
-            );
+            $data['mime'] = $mime;
 
         } else continue;
 
@@ -175,29 +175,33 @@ foreach($search->get() as $document)
             );
 
             // Get title
-            $title = '';
             foreach ($crawler->filter('head > title')->each(function($node) {
 
                 return $node->text();
 
-            }) as $value) {
-
-                $title = html_entity_decode(
-                    $value
-                );
+            }) as $value)
+            {
+                if (!empty($value))
+                {
+                    $data['title'] = html_entity_decode(
+                        $value
+                    );
+                }
             }
 
             // Get description
-            $description = '';
             foreach ($crawler->filter('head > meta[name="description"]')->each(function($node) {
 
                 return $node->attr('content');
 
-            }) as $value) {
-
-                $description = html_entity_decode(
-                    $value
-                );
+            }) as $value)
+            {
+                if (!empty($value))
+                {
+                    $data['description'] = html_entity_decode(
+                        $value
+                    );
+                }
             }
 
             // Get keywords
@@ -206,31 +210,15 @@ foreach($search->get() as $document)
 
                 return $node->attr('content');
 
-            }) as $value) {
-
-                $keywords = html_entity_decode(
-                    $value
-                );
+            }) as $value)
+            {
+                if (!empty($value))
+                {
+                    $data['keywords'] = html_entity_decode(
+                        $value
+                    );
+                }
             }
-
-            // Replace document
-            // https://github.com/manticoresoftware/manticoresearch-php/issues/10#issuecomment-612685916
-            $data =
-            [
-                'url'         => $document->get('url'),
-                'title'       => $title,
-                'description' => $description,
-                'keywords'    => $keywords,
-                'code'        => $code,
-                'size'        => $size,
-                'mime'        => $mime,
-                'time'        => time()
-            ];
-
-            $result = $index->replaceDocument(
-                $data,
-                $document->getId()
-            );
 
             echo sprintf(
                 'index "%s" updated: %s %s' . PHP_EOL,
@@ -329,6 +317,13 @@ foreach($search->get() as $document)
                 }
             }
         }
+
+        // Replace document data
+        // https://github.com/manticoresoftware/manticoresearch-php/issues/10#issuecomment-612685916
+        $result = $index->replaceDocument(
+            $data,
+            $document->getId()
+        );
 
         // Create snap
         if ($config->cli->document->crawl->snap->enabled && $code === 200)
