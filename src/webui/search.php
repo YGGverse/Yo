@@ -119,6 +119,7 @@ switch (true)
 
     default:
 
+        // @TODO add extended syntax mode, add Utils::escape
         $query = $index->search($q);
 }
 
