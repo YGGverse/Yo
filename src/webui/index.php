@@ -272,7 +272,7 @@ $placeholder = sprintf(
   </head>
   <body>
     <header>
-      <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
+      <form name="search" method="GET" action="search.php">
         <h1><?php echo _('Yo!') ?></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="" />
         <button type="submit">

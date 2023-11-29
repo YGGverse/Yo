@@ -305,8 +305,8 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
   </head>
   <body>
     <header>
-      <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
-        <h1><a href="<?php echo $config->webui->url->base; ?>"><?php echo _('Yo!') ?></a></h1>
+      <form name="search" method="GET" action="search.php">
+        <h1><a href="./"><?php echo _('Yo!') ?></a></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="<?php echo htmlentities($q) ?>" />
         <button type="submit">
             <sub>
@@ -366,14 +366,14 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
           <div>
             <a href="<?php echo $result->url ?>"><?php echo htmlentities(urldecode($result->url)) ?></a>
             <small>&bull;</small>
-            <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/explore.php?i=<?php echo $result->getId() ?>"><?php echo _('explore') ?></a>
+            <a rel="nofollow" href="explore.php?i=<?php echo $result->getId() ?>"><?php echo _('explore') ?></a>
           </div>
         </div>
       <?php } ?>
       <?php if ($p * $config->webui->pagination->limit <= $results->getTotal()) { ?>
         <div>
           <div>
-            <a href="<?php echo $config->webui->url->base; ?>/search.php?q=<?php echo urlencode(htmlentities($q)) ?>&p=<?php echo $p + 1 ?>">
+            <a href="search.php?q=<?php echo urlencode(htmlentities($q)) ?>&p=<?php echo $p + 1 ?>">
               <?php echo _('More') ?>
             </a>
           </div>

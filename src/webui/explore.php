@@ -300,8 +300,8 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
   </head>
   <body>
     <header>
-      <form name="search" method="GET" action="<?php echo $config->webui->url->base; ?>/search.php">
-        <h1><a href="<?php echo $config->webui->url->base; ?>"><?php echo _('Yo!') ?></a></h1>
+      <form name="search" method="GET" action="search.php">
+        <h1><a href="./"><?php echo _('Yo!') ?></a></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="" />
         <button type="submit">
             <sub>
@@ -377,7 +377,7 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
                   <ul>
                     <?php foreach ($snap as $file) { ?>
                       <li>
-                        <a rel="nofollow" href="<?php echo $config->webui->url->base; ?>/api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
+                        <a rel="nofollow" href="api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
                           <?php echo sprintf('%s (tar.gz / %s bytes)', date('c', $file->time), number_format($file->size)) ?>
                         </a>
                       </li>
