@@ -1,7 +1,12 @@
 <?php
 
 // Prevent multi-thread execution
-$semaphore = sem_get(crc32('yo.cli.document.crawl'), 1);
+$semaphore = sem_get(
+    crc32(
+        __DIR__ . '.yo.cli.document.crawl'
+    ),
+    1
+);
 
 if (false === sem_acquire($semaphore, true))
 {
