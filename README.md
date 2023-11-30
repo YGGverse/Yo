@@ -112,13 +112,13 @@ Source DB fields required:
 
 #### Logical
 
-SQL text dumps could be useful for public index distribution, but requires more computing resources
+SQL text dumps could be useful for public index distribution, but requires more computing resources.
 
 [Read more](https://manual.manticoresearch.com/Securing_and_compacting_a_table/Backup_and_restore#Backup-and-restore-with-mysqldump)
 
 #### Physical
 
-Better for infrastructure administration and includes original data binaries
+Better for infrastructure administration and includes original data binaries.
 
 [Read more](https://manual.manticoresearch.com/Securing_and_compacting_a_table/Backup_and_restore#Using-manticore-backup-command-line-tool)
 
