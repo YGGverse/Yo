@@ -24,21 +24,33 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 
 ### Install
 
-1. Install `manticore`, `composer` and `php`
-2. Grab latest `Yo` version `git clone https://github.com/YGGverse/Yo.git`
-3. Run `composer update` inside the project directory
-4. Copy and customize config file `cp example/config.json config.json`
-5. Make sure `storage` folder writable
-6. Run indexes initiation script `php src/cli/index/init.php`
-7. Announce new URL `php src/cli/document/add.php URL`
-8. Run crawler to grab the data `php src/cli/document/crawl.php`
-9. Test search results `php src/cli/document/search.php '*'`
+Application require `manticore`, `composer` and `php`
+
+#### Production
+
+* `composer install yggverse/yo`
+
+#### Development
+
+* `git clone https://github.com/YGGverse/Yo.git`
+* `cd yo` & `composer update`
+
+#### Init
+
+* `cp example/config.json config.json`
+* `php src/cli/index/init.php`
+
+#### Usage
+
+* `php src/cli/document/add.php URL`
+* `php src/cli/document/crawl.php`
+* `php src/cli/document/search.php '*'`
 
 #### Web UI
 
 1. `cd src/webui`
 2. `php -S 127.0.0.1:8080`
-3. open `127.0.0.1:8080` in browser
+3. open `http://127.0.0.1:8080` in browser
 
 ## Documentation
 
