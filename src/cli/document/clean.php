@@ -79,6 +79,8 @@ foreach ($delete as $crc32url => $ids)
 // Free mem
 $delete = [];
 
+// @TODO $config->cli->document->crawl->skip->stripos->url
+
 // Dump operation result
 echo sprintf(
     _('duplicated URLs deleted: %s') . PHP_EOL,

@@ -298,6 +298,22 @@ foreach($search->get() as $document)
             {
                 foreach (array_unique($documents) as $url)
                 {
+                    // Apply stripos condition
+                    $skip = false;
+
+                    foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
+                    {
+                        if (false !== stripos($url, $condition)) {
+
+                            $skip = true;
+
+                            break;
+                        }
+                    }
+
+                    if ($skip) continue;
+
+                    // Save index
                     $url      = trim($url);
                     $crc32url = crc32($url);
 

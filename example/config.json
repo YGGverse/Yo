@@ -99,6 +99,20 @@
                         "regex":"/.*/ui"
                     }
                 },
+                "skip":
+                {
+                    "stripos":
+                    {
+                        "url":
+                        [
+                            "#",
+                            "javascript:",
+                            "mailto:",
+                            "magnet:",
+                            "xmpp:"
+                        ]
+                    }
+                },
                 "snap":
                 {
                     "enabled":true
