@@ -127,7 +127,7 @@ Better for infrastructure administration and includes original data binaries.
 ### [Yggdrasil](https://github.com/yggdrasil-network)
 
 * `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/` - IPv6 `0200::/7` addresses only
-* `http://yo.ygg` - `.ygg` domain zone search
+* `http://yo.ygg` - `.ygg` domain zone search only
 
 ### [Alfis DNS](https://github.com/Revertron/Alfis)
 
