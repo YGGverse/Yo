@@ -108,8 +108,29 @@ Source DB fields required:
 * `start` - optional, offset to start queue
 * `limit` - optional, limit queue
 
+### Backup
+
+#### Logical
+
+SQL text dumps could be useful for public index distribution, but requires more computing resources
+
+[Read more](https://manual.manticoresearch.com/Securing_and_compacting_a_table/Backup_and_restore#Backup-and-restore-with-mysqldump)
+
+#### Physical
+
+Better for infrastructure administration and includes original data binaries
+
+[Read more](https://manual.manticoresearch.com/Securing_and_compacting_a_table/Backup_and_restore#Using-manticore-backup-command-line-tool)
+
 ## Instances
 
-### Yggdrasil
+### [Yggdrasil](https://github.com/yggdrasil-network)
 
-* `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/`
+* `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/` - IPv6 `0200::/7` addresses only
+* `http://yo.ygg` - `.ygg` domain zone search
+
+### [Alfis DNS](https://github.com/Revertron/Alfis)
+
+* `http://ygg.yo.index` - alias of `http://yo.ygg`
+
+_*`*.yo.index` reserved for domain-oriented instances e.g. `.btn`, `.conf`, `.mirror` - feel free to request the address_
