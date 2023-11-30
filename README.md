@@ -28,7 +28,7 @@ Application require `manticore`, `composer` and `php`
 
 #### Production
 
-* `composer install yggverse/yo`
+* `composer create-project yggverse/yo`
 
 #### Development
 
