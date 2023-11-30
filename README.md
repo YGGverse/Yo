@@ -126,11 +126,11 @@ Better for infrastructure administration and includes original data binaries.
 
 ### [Yggdrasil](https://github.com/yggdrasil-network)
 
-* `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/` - IPv6 `0200::/7` addresses only
+* `http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/` - IPv6 `0200::/7` addresses only | [index](http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/index.sql)
 
 ### [Alfis DNS](https://github.com/Revertron/Alfis)
 
-* `http://yo.ygg` - `.ygg` domain zone search only
-* `http://ygg.yo.index` - alias of `http://yo.ygg`
+* `http://yo.ygg` - `.ygg` domain zone search only | [index](http://yo.ygg/index.sql)
+* `http://ygg.yo.index` - alias of `http://yo.ygg` | [index](http://ygg.yo.index/index.sql)
 
 _*`*.yo.index` reserved for domain-oriented instances e.g. `.btn`, `.conf`, `.mirror` - feel free to request the address_
