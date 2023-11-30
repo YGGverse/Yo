@@ -311,7 +311,19 @@ foreach($search->get() as $document)
                         }
                     }
 
-                    if ($skip) continue;
+                    if ($skip)
+                    {
+                        echo sprintf(
+                            'skip "%s" by stripos condition "%s"' . PHP_EOL,
+                            $url,
+                            print_r(
+                                $config->cli->document->crawl->skip->stripos->url,
+                                true
+                            )
+                        );
+
+                        continue;
+                    }
 
                     // Save index
                     $url      = trim($url);
