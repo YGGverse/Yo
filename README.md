@@ -33,7 +33,7 @@ Application require `manticore`, `composer` and `php`
 #### Development
 
 * `git clone https://github.com/YGGverse/Yo.git`
-* `cd yo` & `composer update`
+* `cd Yo` & `composer update`
 
 #### Init
 
