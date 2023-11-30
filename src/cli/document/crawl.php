@@ -226,19 +226,6 @@ foreach($search->get() as $document)
                 }
             }
 
-            echo sprintf(
-                'index "%s" updated: %s %s' . PHP_EOL,
-                $config->manticore->index->document->name,
-                print_r(
-                    $result,
-                    true
-                ),
-                print_r(
-                    $data,
-                    true
-                ),
-            );
-
             // Crawl documents
             $documents = [];
 
@@ -357,6 +344,20 @@ foreach($search->get() as $document)
         $result = $index->replaceDocument(
             $data,
             $document->getId()
+        );
+
+        // Debug result
+        echo sprintf(
+            'index "%s" updated: %s %s' . PHP_EOL,
+            $config->manticore->index->document->name,
+            print_r(
+                $result,
+                true
+            ),
+            print_r(
+                $data,
+                true
+            ),
         );
 
         // Create snap
