@@ -82,7 +82,10 @@ $placeholder = sprintf(
         text-align: center;
       }
 
-      input {
+      input,
+      input:-webkit-autofill,
+      input:-webkit-autofill:focus {
+        transition: background-color 0s 600000s, color 0s 600000s; /* chrome */
         width: 100%;
         margin: 8px 0;
         padding: 12px 0;

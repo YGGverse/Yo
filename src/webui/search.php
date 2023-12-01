@@ -242,7 +242,10 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         accent-color: #3394fb;
       }
 
-      input[type="text"] {
+      input[type="text"],
+      input[type="text"]:-webkit-autofill,
+      input[type="text"]:-webkit-autofill:focus {
+        transition: background-color 0s 600000s, color 0s 600000s; /* chrome */
         width: 100%;
         margin: 12px 0;
         padding: 6px 0;
