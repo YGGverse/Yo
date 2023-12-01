@@ -43,6 +43,61 @@
             {
                 "enabled":false
             }
+        },
+        "footer":
+        {
+            "links":
+            [
+                {
+                    "text":"0200::/7",
+                    "attributes":
+                    {
+                        "title":"Serch in 0200::/7 IPv6",
+                        "href":"http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/",
+                        "target":"_blank"
+                    },
+                    "index":
+                    [
+                        "http://[201:23b4:991a:634d:8359:4521:5576:15b7]/yo/index.sql"
+                    ]
+                },
+                {
+                    "text":"yo.ygg",
+                    "attributes":
+                    {
+                        "title":"Search in .ygg zone",
+                        "href":"http://yo.ygg",
+                        "target":"_blank"
+                    },
+                    "index":
+                    [
+                        "http://yo.ygg/index.sql"
+                    ]
+                },
+                {
+                    "text":"ygg.yo.index",
+                    "attributes":
+                    {
+                        "title":"Search in .ygg zone",
+                        "href":"http://ygg.yo.index",
+                        "target":"_blank"
+                    },
+                    "index":
+                    [
+                        "http://ygg.yo.index/index.sql"
+                    ]
+                },
+                {
+                    "text":"GitHub",
+                    "attributes":
+                    {
+                        "title":"Source code",
+                        "href":"https://github.com/YGGverse/Yo",
+                        "target":"_blank"
+                    },
+                    "index":[]
+                }
+            ]
         }
     },
     "cli":
