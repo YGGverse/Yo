@@ -302,10 +302,12 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
       <form name="search" method="GET" action="search.php">
         <h1><a href="./"><?php echo _('Yo!') ?></a></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="" />
-        <label for="e">
-          <input type="checkbox" name="e" id="e" value="true" />
-          <?php echo _('Extended') ?>
-        </label>
+        <?php if ($config->webui->search->extended->enabled) { ?>
+          <label for="e">
+            <input type="checkbox" name="e" id="e" value="true" />
+            <?php echo _('Extended') ?>
+          </label>
+        <?php } ?>
         <button type="submit">
             <sub>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-search" viewBox="0 0 16 16">

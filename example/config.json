@@ -38,6 +38,10 @@
                         "regex":"/.*/ui"
                     }
                 }
+            },
+            "extended":
+            {
+                "enabled":false
             }
         }
     },

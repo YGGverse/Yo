@@ -121,7 +121,7 @@ switch (true)
 
     // Allow raw requests on extended syntax mode requested
     // http://sphinxsearch.com/docs/current/extended-syntax.html
-    if (isset($_GET['e']))
+    if (isset($_GET['e']) && $config->webui->search->extended->enabled)
     {
       $query = $index->search($q);
     }
@@ -322,10 +322,12 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       <form name="search" method="GET" action="search.php">
         <h1><a href="./"><?php echo _('Yo!') ?></a></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="<?php echo htmlentities($q) ?>" />
-        <label for="e">
-          <input type="checkbox" name="e" id="e" value="true" <?php echo isset($_GET['e']) ? 'checked="checked"': false ?>/>
-          <?php echo _('Extended') ?>
-        </label>
+        <?php if ($config->webui->search->extended->enabled) { ?>
+          <label for="e">
+            <input type="checkbox" name="e" id="e" value="true" <?php echo isset($_GET['e']) ? 'checked="checked"': false ?>/>
+            <?php echo _('Extended') ?>
+          </label>
+        <?php } ?>
         <button type="submit">
             <sub>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-search" viewBox="0 0 16 16">
@@ -336,7 +338,7 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       </form>
     </header>
     <main>
-      <?php if (isset($_GET['e'])) { ?>
+      <?php if (isset($_GET['e']) && $config->webui->search->extended->enabled) { ?>
         <div>
           <p>
             <?php echo _('Extended syntax enabled, follow') ?>
