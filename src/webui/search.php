@@ -102,25 +102,38 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
   }
 }
 
-// Extended syntax corrections
+// Extended corrections
 switch (true)
 {
-    case empty($q):
+  case empty($q):
 
-        $query = $index->search('')->sort('RAND()');
+    $query = $index->search('')->sort('RAND()');
 
-    break;
+  break;
 
-    case filter_var($q, FILTER_VALIDATE_URL):
+  case filter_var($q, FILTER_VALIDATE_URL):
 
-        $query = $index->search('')->filter('crc32url', crc32($q));
+    $query = $index->search('')->filter('crc32url', crc32($q));
 
-    break;
+  break;
 
-    default:
+  default:
 
-        // @TODO add extended syntax mode, add Utils::escape
-        $query = $index->search($q);
+    // Allow raw requests on extended syntax mode requested
+    // http://sphinxsearch.com/docs/current/extended-syntax.html
+    if (isset($_GET['e']))
+    {
+      $query = $index->search($q);
+    }
+
+    // Escape reserved chars
+    // http://sphinxsearch.com/docs/current/extended-syntax.html
+    else
+    {
+      $query = $index->search(
+        @\Manticoresearch\Utils::escape($q)
+      );
+    }
 }
 
 // Get found
@@ -225,7 +238,11 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         text-align: center;
       }
 
-      input {
+      input[type="checkbox"] {
+        accent-color: #3394fb;
+      }
+
+      input[type="text"] {
         width: 100%;
         margin: 12px 0;
         padding: 6px 0;
@@ -236,25 +253,24 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         text-align: center;
       }
 
-      input:hover {
+      input[type="text"]:hover {
         background-color: #111
       }
 
-      input:focus {
+      input[type="text"]:focus {
         outline: none;
         background-color: #111
       }
 
-      input:focus::placeholder {
+      input[type="text"]:focus::placeholder {
         color: #090808
       }
 
       label {
         font-size: 14px;
-        color: #fff;
-        float: left;
-        margin-left: 16px;
-        margin-bottom: 14px;
+        position: absolute;
+        right: 80px;
+        top: 18px;
       }
 
       label > input {
@@ -292,8 +308,6 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       }
 
       p {
-        margin: 16px 0;
-        text-align: right;
         font-size: 11px;
       }
 
@@ -308,6 +322,10 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       <form name="search" method="GET" action="search.php">
         <h1><a href="./"><?php echo _('Yo!') ?></a></h1>
         <input type="text" name="q" placeholder="<?php echo $placeholder ?>" value="<?php echo htmlentities($q) ?>" />
+        <label for="e">
+          <input type="checkbox" name="e" id="e" value="true" <?php echo isset($_GET['e']) ? 'checked="checked"': false ?>/>
+          <?php echo _('Extended') ?>
+        </label>
         <button type="submit">
             <sub>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-search" viewBox="0 0 16 16">
@@ -318,10 +336,36 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
       </form>
     </header>
     <main>
-      <?php if ($response) { ?>
-        <div><?php echo $response ?></div>
+      <?php if (isset($_GET['e'])) { ?>
+        <div>
+          <p>
+            <?php echo _('Extended syntax enabled, follow') ?>
+            <a href="http://sphinxsearch.com/docs/current/extended-syntax.html" rel="nofollow" target="_blank"><?php echo _('Documentation') ?></a>
+            <sub>
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+                <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+              </svg>
+            </sub>
+          </p>
+          <p>
+            <?php echo _('Available fields:') ?>
+            <i>@title</i>
+            <i>@description</i>
+            <i>@keywords</i>
+            <i>@mime</i>
+            <i>@url</i>
+          </p>
+        </div>
       <?php } ?>
-      <div><?php echo sprintf(_('Found: %s'), number_format($found)) ?></div>
+      <?php if ($response) { ?>
+        <div>
+          <?php echo $response ?>
+        </div>
+      <?php } ?>
+      <div>
+        <?php echo sprintf(_('Found: %s'), number_format($found)) ?>
+      </div>
       <?php foreach ($results as $result) { ?>
         <div>
           <?php
