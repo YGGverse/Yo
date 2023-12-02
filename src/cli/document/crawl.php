@@ -380,22 +380,12 @@ foreach($search->get() as $document)
                     $filepath = __DIR__ . '/../../../' . $config->snap->storage->tmp->directory;
                 }
 
-                $filepath = sprintf(
-                    '%s/%s',
-                    $filepath,
-                    implode(
-                        '/',
-                        str_split(
-                            $md5url
-                        )
-                    )
-                );
-
                 @mkdir($filepath, 0755, true);
 
                 $tmp = sprintf(
-                    '%s/%s.tar',
+                    '%s/%s.%s.tar',
                     $filepath,
+                    $md5url,
                     $time
                 );
 
