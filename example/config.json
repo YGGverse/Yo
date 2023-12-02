@@ -192,24 +192,34 @@
                 "directory":"storage/tmp/snap"
             },
             "local":{
-                "enabled":true,
+                "enabled":false,
                 "directory":"storage/snap",
                 "size":
                 {
                     "max":10000024
                 },
                 "mime":
-                [
-                    "application/xhtml+xml",
-                    "application/javascript",
-                    "text/html",
-                    "text/plain",
-                    "text/css",
-                    "image/webp",
-                    "image/png",
-                    "image/gif",
-                    "image/ico"
-                ]
+                {
+                    "stripos":
+                    [
+                        "application/xhtml+xml",
+                        "application/javascript",
+                        "text/html",
+                        "text/plain",
+                        "text/css",
+                        "image/webp",
+                        "image/png",
+                        "image/gif",
+                        "image/ico"
+                    ]
+                },
+                "url":
+                {
+                    "stripos":
+                    [
+                        "http"
+                    ]
+                }
             },
             "remote":
             {
@@ -237,17 +247,27 @@
                             "max":10000024
                         },
                         "mime":
-                        [
-                            "application/xhtml+xml",
-                            "application/javascript",
-                            "text/html",
-                            "text/plain",
-                            "text/css",
-                            "image/webp",
-                            "image/png",
-                            "image/gif",
-                            "image/ico"
-                        ]
+                        {
+                            "stripos":
+                            [
+                                "application/xhtml+xml",
+                                "application/javascript",
+                                "text/html",
+                                "text/plain",
+                                "text/css",
+                                "image/webp",
+                                "image/png",
+                                "image/gif",
+                                "image/ico"
+                            ]
+                        },
+                        "url":
+                        {
+                            "stripos":
+                            [
+                                "http"
+                            ]
+                        }
                     }
                 ]
             }

@@ -479,10 +479,10 @@ foreach($search->get() as $document)
                 // Copy to local storage on enabled
                 if ($config->snap->storage->local->enabled)
                 {
+                    // Check for mime allowed
                     $allowed = false;
 
-                    // Check for mime allowed
-                    foreach ($config->snap->storage->local->mime as $whitelist)
+                    foreach ($config->snap->storage->local->mime->stripos as $whitelist)
                     {
                         if (false !== stripos($mime, $whitelist))
                         {
@@ -491,10 +491,30 @@ foreach($search->get() as $document)
                         }
                     }
 
-                    // Check size limits
-                    if ($size > $config->snap->storage->local->size->max)
+                    // Check for url allowed
+                    if ($allowed)
                     {
                         $allowed = false;
+
+                        foreach ($config->snap->storage->local->url->stripos as $whitelist)
+                        {
+                            if (false !== stripos($document->get('url'), $whitelist))
+                            {
+                                $allowed = true;
+                                break;
+                            }
+                        }
+
+                        // Check size limits
+                        if ($allowed)
+                        {
+                            $allowed = false;
+
+                            if ($size <= $config->snap->storage->local->size->max)
+                            {
+                                $allowed = true;
+                            }
+                        }
                     }
 
                     // Copy snap to the permanent storage
@@ -558,10 +578,10 @@ foreach($search->get() as $document)
                         continue;
                     }
 
+                    // Check for mime allowed
                     $allowed = false;
 
-                    // Check for mime allowed
-                    foreach ($ftp->mime as $whitelist)
+                    foreach ($ftp->mime->stripos as $whitelist)
                     {
                         if (false !== stripos($mime, $whitelist))
                         {
@@ -570,10 +590,34 @@ foreach($search->get() as $document)
                         }
                     }
 
-                    // Check size limits
-                    if ($size > $ftp->size->max)
+                    if (!$allowed)
                     {
-                        $allowed = false;
+                        continue;
+                    }
+
+                    // Check for url allowed
+                    $allowed = false;
+
+                    foreach ($ftp->url->stripos as $whitelist)
+                    {
+                        if (false !== stripos($document->get('url'), $whitelist))
+                        {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+
+                    if (!$allowed)
+                    {
+                        continue;
+                    }
+
+                    // Check size limits
+                    $allowed = false;
+
+                    if ($size <= $ftp->size->max)
+                    {
+                        $allowed = true;
                     }
 
                     if (!$allowed)
