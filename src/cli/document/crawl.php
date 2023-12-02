@@ -125,12 +125,15 @@ foreach($search->get() as $document)
     ];
 
     // Debug target
-    echo sprintf(
-        _('[%s] index "%s" in "%s"') . PHP_EOL,
-        date('c'),
-        $document->get('url'),
-        $config->manticore->index->document->name
-    );
+    if ($config->cli->document->crawl->debug->level->notice)
+    {
+        echo sprintf(
+            _('[%s] [notice] index "%s" in "%s"') . PHP_EOL,
+            date('c'),
+            $document->get('url'),
+            $config->manticore->index->document->name
+        );
+    }
 
     // Update index time anyway and set reset code to 404
     $index->updateDocument(
