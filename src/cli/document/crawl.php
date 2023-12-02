@@ -581,9 +581,12 @@ foreach($search->get() as $document)
                             );
 
                             // Delay next attempt
-                            sleep(
-                                $ftp->connection->attempts->delay
-                            );
+                            if ($ftp->connection->attempts->delay)
+                            {
+                                sleep(
+                                    $ftp->connection->attempts->delay
+                                );
+                            }
                         }
 
                     } while ($connection === false);
@@ -605,7 +608,10 @@ foreach($search->get() as $document)
     }
 
     // Crawl queue delay
-    sleep(
-        $config->cli->document->crawl->queue->limit
-    );
+    if ($config->cli->document->crawl->queue->limit)
+    {
+        sleep(
+            $config->cli->document->crawl->queue->limit
+        );
+    }
 }
