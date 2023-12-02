@@ -275,7 +275,6 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
 
       a, a:visited, a:active {
         color: #9ba2ac;
-        display: inline-block;
         font-size: 12px;
       }
 
