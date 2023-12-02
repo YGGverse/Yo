@@ -525,8 +525,9 @@ foreach($search->get() as $document)
                         $filename = sprintf(
                             '%s/%s',
                             $filepath,
-                            basename(
-                                $tmp
+                            sprintf(
+                                '%s.tar.gz',
+                                $time
                             )
                         );
 
@@ -588,8 +589,9 @@ foreach($search->get() as $document)
                     $filename = sprintf(
                         '%s/%s',
                         $filepath,
-                        basename(
-                            $tmp
+                        sprintf(
+                            '%s.tar.gz',
+                            $time
                         )
                     );
 
