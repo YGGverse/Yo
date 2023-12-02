@@ -102,6 +102,15 @@
         {
             "crawl":
             {
+                "debug":
+                {
+                    "level":
+                    {
+                        "notice":true,
+                        "warning":true,
+                        "error":true
+                    }
+                },
                 "curl":
                 {
                     "connection":

@@ -1,17 +1,7 @@
 <?php
 
-// Prevent multi-thread execution
-$semaphore = sem_get(
-    crc32(
-        __DIR__ . '.yo.cli.document.crawl'
-    ),
-    1
-);
-
-if (false === sem_acquire($semaphore, true))
-{
-  exit ('process execution locked by another thread!' . PHP_EOL);
-}
+// Debug
+$microtime = microtime(true);
 
 // Load dependencies
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -23,6 +13,27 @@ $config = json_decode(
     )
 );
 
+// Prevent multi-thread execution
+$semaphore = sem_get(
+    crc32(
+        __DIR__ . '.yo.cli.document.crawl'
+    ),
+    1
+);
+
+if (false === sem_acquire($semaphore, true))
+{
+    if ($config->cli->document->crawl->debug->level->warning)
+    {
+        echo sprintf(
+            _('[%s] [warning] process execution locked by another thread!') . PHP_EOL,
+            date('c')
+        );
+    }
+
+    exit;
+}
+
 // Set global options
 define(
     'CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX',
@@ -30,40 +41,69 @@ define(
 );
 
 // Init client
-$client = new \Manticoresearch\Client(
-    [
-        'host' => $config->manticore->server->host,
-        'port' => $config->manticore->server->port,
-    ]
-);
+try {
 
-// Init search
-$search = new \Manticoresearch\Search(
-    $client
-);
+    $client = new \Manticoresearch\Client(
+        [
+            'host' => $config->manticore->server->host,
+            'port' => $config->manticore->server->port,
+        ]
+    );
 
-$search->setIndex(
-    $config->manticore->index->document->name
-);
+    // Init search
+    $search = new \Manticoresearch\Search(
+        $client
+    );
 
-$search->match(
-    '*',
-    'url'
-);
+    $search->setIndex(
+        $config->manticore->index->document->name
+    );
 
-$search->sort(
-    'time',
-    'asc'
-);
+    $search->match(
+        '*',
+        'url'
+    );
 
-$search->limit(
-    $config->cli->document->crawl->queue->limit
-);
+    $search->sort(
+        'time',
+        'asc'
+    );
 
-// Init index
-$index = $client->index(
-    $config->manticore->index->document->name
-);
+    $search->limit(
+        $config->cli->document->crawl->queue->limit
+    );
+
+    // Init index
+    $index = $client->index(
+        $config->manticore->index->document->name
+    );
+}
+
+catch (Exception $exception)
+{
+    if ($config->cli->document->crawl->debug->level->error)
+    {
+        echo sprintf(
+            _('[%s] [error] %s') . PHP_EOL,
+            date('c'),
+            print_r(
+                $exception,
+                true
+            )
+        );
+    }
+
+    exit;
+}
+
+// Debug totals
+if ($config->cli->document->crawl->debug->level->notice)
+{
+    echo sprintf(
+        _('[%s] [notice] crawl queue begin...') . PHP_EOL,
+        date('c')
+    );
+}
 
 // Begin queue
 foreach($search->get() as $document)
@@ -86,7 +126,8 @@ foreach($search->get() as $document)
 
     // Debug target
     echo sprintf(
-        'index "%s" in "%s"' . PHP_EOL,
+        _('[%s] index "%s" in "%s"') . PHP_EOL,
+        date('c'),
         $document->get('url'),
         $config->manticore->index->document->name
     );
@@ -296,14 +337,18 @@ foreach($search->get() as $document)
 
                     if ($skip)
                     {
-                        echo sprintf(
-                            'skip "%s" by stripos condition "%s"' . PHP_EOL,
-                            $url,
-                            print_r(
-                                $config->cli->document->crawl->skip->stripos->url,
-                                true
-                            )
-                        );
+                        if ($config->cli->document->crawl->debug->level->notice)
+                        {
+                            echo sprintf(
+                                _('[%s] [notice] skip "%s" by stripos condition "%s"') . PHP_EOL,
+                                date('c'),
+                                $url,
+                                print_r(
+                                    $config->cli->document->crawl->skip->stripos->url,
+                                    true
+                                )
+                            );
+                        }
 
                         continue;
                     }
@@ -325,11 +370,15 @@ foreach($search->get() as $document)
                             ]
                         );
 
-                        echo sprintf(
-                            'add "%s" to "%s"' . PHP_EOL,
-                            $url,
-                            $config->manticore->index->document->name
-                        );
+                        if ($config->cli->document->crawl->debug->level->notice)
+                        {
+                            echo sprintf(
+                                _('[%s] [notice] add "%s" to "%s"') . PHP_EOL,
+                                date('c'),
+                                $url,
+                                $config->manticore->index->document->name
+                            );
+                        }
                     }
                 }
             }
@@ -343,18 +392,22 @@ foreach($search->get() as $document)
         );
 
         // Debug result
-        echo sprintf(
-            'index "%s" updated: %s %s' . PHP_EOL,
-            $config->manticore->index->document->name,
-            print_r(
-                $result,
-                true
-            ),
-            print_r(
-                $data,
-                true
-            ),
-        );
+        if ($config->cli->document->crawl->debug->level->notice)
+        {
+            echo sprintf(
+                '[%s] [notice] index "%s" updated: %s %s' . PHP_EOL,
+                date('c'),
+                $config->manticore->index->document->name,
+                print_r(
+                    $result,
+                    true
+                ),
+                print_r(
+                    $data,
+                    true
+                ),
+            );
+        }
 
         // Create snap
         if ($config->cli->document->crawl->snap->enabled && $code === 200)
@@ -477,10 +530,18 @@ foreach($search->get() as $document)
                             )
                         );
 
-                        copy(
-                            $tmp,
-                            $filename
-                        );
+                        if (!copy($tmp, $filename))
+                        {
+                            if ($config->cli->document->crawl->debug->level->error)
+                            {
+                                echo sprintf(
+                                    _('[%s] [error] could not copy "%" to "%" on local storage') . PHP_EOL,
+                                    date('c'),
+                                    $tmp,
+                                    $filename
+                                );
+                            }
+                        }
                     }
                 }
 
@@ -557,10 +618,19 @@ foreach($search->get() as $document)
                                 true
                             );
 
-                            $remote->copy(
-                                $tmp,
-                                $filename
-                            );
+                            if (!$remote->copy($tmp, $filename))
+                            {
+                                if ($config->cli->document->crawl->debug->level->error)
+                                {
+                                    echo sprintf(
+                                        _('[%s] [error] could not copy "%" to "%" on destination "%s"') . PHP_EOL,
+                                        date('c'),
+                                        $tmp,
+                                        $filename,
+                                        $ftp->connection->host,
+                                    );
+                                }
+                            }
 
                             $remote->close();
 
@@ -574,15 +644,28 @@ foreach($search->get() as $document)
                             }
 
                             // Log event
-                            echo sprintf(
-                                _('[attempt: %s] wait for remote storage "%s" reconnection...') . PHP_EOL,
-                                $attempt++,
-                                $ftp->connection->host,
-                            );
+                            if ($config->cli->document->crawl->debug->level->warning)
+                            {
+                                echo sprintf(
+                                    _('[%s] [warning] attempt: %s, wait for remote storage "%s" reconnection...') . PHP_EOL,
+                                    date('c'),
+                                    $attempt++,
+                                    $ftp->connection->host,
+                                );
+                            }
 
                             // Delay next attempt
                             if ($ftp->connection->attempts->delay)
                             {
+                                if ($config->cli->document->crawl->debug->level->warning)
+                                {
+                                    echo sprintf(
+                                        _('[%s] [warning] pending %s seconds to reconnect...') . PHP_EOL,
+                                        date('c'),
+                                        $ftp->connection->attempts->delay
+                                    );
+                                }
+
                                 sleep(
                                     $ftp->connection->attempts->delay
                                 );
@@ -593,25 +676,72 @@ foreach($search->get() as $document)
                 }
 
                 // Remove tmp data
-                @unlink(
-                    $tmp
-                );
+                if (unlink($tmp))
+                {
+                    if ($config->cli->document->crawl->debug->level->notice)
+                    {
+                        echo sprintf(
+                            _('[%s] [notice] remove tmp snap file %s') . PHP_EOL,
+                            date('c'),
+                            $tmp
+                        );
+                    }
+                }
+
+                else
+                {
+                    if ($config->cli->document->crawl->debug->level->error)
+                    {
+                        echo sprintf(
+                            _('[%s] [error] could not remove tmp snap file %s') . PHP_EOL,
+                            date('c'),
+                            $tmp
+                        );
+                    }
+                }
             }
 
             catch (Exception $exception)
             {
-                var_dump(
-                    $exception
-                );
+                if ($config->cli->document->crawl->debug->level->error)
+                {
+                    echo sprintf(
+                        _('[%s] [error] %s') . PHP_EOL,
+                        date('c'),
+                        print_r(
+                            $exception,
+                            true
+                        )
+                    );
+                }
             }
         }
     }
 
     // Crawl queue delay
-    if ($config->cli->document->crawl->queue->limit)
+    if ($config->cli->document->crawl->queue->delay)
     {
+        if ($config->cli->document->crawl->debug->level->notice)
+        {
+            echo sprintf(
+                _('[%s] [notice] pending %s seconds...') . PHP_EOL,
+                date('c'),
+                $config->cli->document->crawl->queue->delay
+            );
+        }
+
         sleep(
-            $config->cli->document->crawl->queue->limit
+            $config->cli->document->crawl->queue->delay
+        );
+    }
+
+    // Debug totals
+    if ($config->cli->document->crawl->debug->level->notice)
+    {
+        echo sprintf(
+            _('[%s] [notice] crawl queue completed in %s') . PHP_EOL,
+            date('c'),
+            microtime(true) - $microtime
         );
     }
 }
