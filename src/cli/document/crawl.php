@@ -50,30 +50,6 @@ try {
         ]
     );
 
-    // Init search
-    $search = new \Manticoresearch\Search(
-        $client
-    );
-
-    $search->setIndex(
-        $config->manticore->index->document->name
-    );
-
-    $search->match(
-        '*',
-        'url'
-    );
-
-    $search->sort(
-        'time',
-        'asc'
-    );
-
-    $search->limit(
-        $config->cli->document->crawl->queue->limit
-    );
-
-    // Init index
     $index = $client->index(
         $config->manticore->index->document->name
     );
@@ -105,8 +81,16 @@ if ($config->cli->document->crawl->debug->level->notice)
     );
 }
 
-// Begin queue
-foreach($search->get() as $document)
+// Begin crawl queue
+// thanks to @manticoresearch for help with random feature implementation:
+// https://github.com/manticoresoftware/manticoresearch-php/discussions/176
+
+foreach($index->search('')
+              ->expression('random', 'rand()')
+              ->sort('time', 'asc')
+              ->sort('random', 'asc')
+              ->limit($config->cli->document->crawl->queue->limit)
+              ->get() as $document)
 {
     // Define data
     $time = time();
