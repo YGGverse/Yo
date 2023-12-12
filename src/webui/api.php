@@ -65,7 +65,6 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                     exit;
                 }
 
-
                 // Detect remote snap source
                 if (preg_match('/^[\d]+$/', $_GET['source']))
                 {
@@ -155,9 +154,96 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                 }
 
                 // Local
+                else if ($config->snap->storage->local->enabled)
+                {
+                    // Prefix absolute
+                    if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+                    {
+                        $prefix = $config->snap->storage->local->directory;
+                    }
+
+                    // Prefix relative
+                    else
+                    {
+                        $prefix = __DIR__ . '/../../' . $config->snap->storage->local->directory;
+                    }
+
+                    // Prepare snap path
+                    $filename = sprintf(
+                        '%s/%s/%s.tar.gz',
+                        $prefix,
+                        implode(
+                            '/',
+                            str_split(
+                                $_GET['md5url']
+                            )
+                        ),
+                        $_GET['time']
+                    );
+
+                    // Check snap exist
+                    if (!file_exists($filename) || !is_readable($filename))
+                    {
+                        echo json_encode(
+                            [
+                                'status'  => false,
+                                'message' => _('requested snap not found')
+                            ]
+                        );
+
+                        exit;
+                    }
+
+                    // Check snap has valid size
+                    if (!$size = filesize($filename))
+                    {
+                        echo json_encode(
+                            [
+                                'status'  => false,
+                                'message' => _('requested snap has invalid size')
+                            ]
+                        );
+
+                        exit;
+                    }
+
+                    // Set headers
+                    header(
+                        'Content-Type: application/tar+gzip'
+                    );
+
+                    header(
+                        sprintf(
+                            'Content-Length: %s',
+                            $size
+                        )
+                    );
+
+                    header(
+                        sprintf(
+                            'Content-Disposition: filename="snap.%s.%s"',
+                            $_GET['md5url'],
+                            basename(
+                                $filename
+                            )
+                        )
+                    );
+
+                    readfile(
+                        $filename
+                    );
+
+                    exit;
+                }
+
                 else
                 {
-                    // @TODO
+                    echo json_encode(
+                        [
+                            'status'  => false,
+                            'message' => _('requested source not found')
+                        ]
+                    );
                 }
 
             break;

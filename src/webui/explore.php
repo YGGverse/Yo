@@ -86,7 +86,47 @@ $filepath = implode(
   )
 );
 
-/// Local snaps @TODO
+/// Local snaps
+if ($config->snap->storage->local->enabled)
+{
+    /// absolute
+    if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+    {
+        $prefix = $config->snap->storage->local->directory;
+    }
+
+    /// relative
+    else
+    {
+        $prefix = __DIR__ . '/../../' . $config->snap->storage->local->directory;
+    }
+
+    foreach ((array) scandir(sprintf('%s/%s', $prefix, $filepath)) as $filename)
+    {
+      if (in_array($filename, ['.', '..']))
+      {
+        continue;
+      }
+
+      $basename = basename($filename);
+      $time = preg_replace('/\D/', '', $basename);
+
+      $snaps[_('Local')][] = (object)
+      [
+        'source' => 'local',
+        'md5url' => $md5url,
+        'name'   => $basename,
+        'time'   => $time,
+        'size'   => filesize(
+          sprintf(
+            '%s/%s',
+            $prefix,
+            $filepath
+          )
+        ),
+      ];
+    }
+}
 
 /// Remote snaps
 foreach ($config->snap->storage->remote->ftp as $i => $ftp)
