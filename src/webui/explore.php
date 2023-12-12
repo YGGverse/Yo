@@ -89,19 +89,23 @@ $filepath = implode(
 /// Local snaps
 if ($config->snap->storage->local->enabled)
 {
-    /// absolute
-    if ('/' === substr($config->snap->storage->local->directory, 0, 1))
-    {
-        $prefix = $config->snap->storage->local->directory;
-    }
+  /// absolute
+  if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+  {
+    $prefix = $config->snap->storage->local->directory;
+  }
 
-    /// relative
-    else
-    {
-        $prefix = __DIR__ . '/../../' . $config->snap->storage->local->directory;
-    }
+  /// relative
+  else
+  {
+    $prefix = __DIR__ . '/../../' . $config->snap->storage->local->directory;
+  }
 
-    foreach ((array) scandir(sprintf('%s/%s', $prefix, $filepath)) as $filename)
+  $directory = sprintf('%s/%s', $prefix, $filepath);
+
+  if (is_dir($directory))
+  {
+    foreach ((array) scandir($directory) as $filename)
     {
       if (in_array($filename, ['.', '..']))
       {
@@ -126,6 +130,7 @@ if ($config->snap->storage->local->enabled)
         ),
       ];
     }
+  }
 }
 
 /// Remote snaps
