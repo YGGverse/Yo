@@ -178,6 +178,16 @@ foreach($index->search('')
         // Update HTTP code or skip on empty
         if ($code = curl_getinfo($request, CURLINFO_HTTP_CODE))
         {
+            // Delete deprecated document from index as HTTP code still not 200
+            if ($code != 200 && !empty($data['code']) && $data['code'] != 200)
+            {
+                $index->deleteDocument(
+                    $document->getId()
+                );
+
+                continue;
+            }
+
             $data['code'] = $code;
 
         } else continue;
