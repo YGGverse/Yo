@@ -49,7 +49,9 @@ $result = $index->addDocument(
     [
         'url'  => $url,
         'rank' => (int) mb_strlen(
+            (string)
             urldecode(
+                (string)
                 parse_url(
                     $url,
                     PHP_URL_PATH

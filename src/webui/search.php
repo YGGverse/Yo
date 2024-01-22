@@ -84,7 +84,9 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
         [
           'url'  => $url,
           'rank' => (int) mb_strlen(
+            (string)
               urldecode(
+                (string)
                   parse_url(
                       $url,
                       PHP_URL_PATH
