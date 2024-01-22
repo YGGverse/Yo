@@ -76,6 +76,10 @@ $result = $index->create(
         [
             'type' => 'integer'
         ],
+        'rank' =>
+        [
+            'type' => 'integer'
+        ],
         'time' =>
         [
             'type' => 'integer'
