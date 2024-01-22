@@ -82,7 +82,15 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
 
       $index->addDocument(
         [
-          'url' => $url
+          'url'  => $url,
+          'rank' => (int) mb_strlen(
+              urldecode(
+                  parse_url(
+                      $url,
+                      PHP_URL_PATH
+                  )
+              )
+          )
         ],
         $crc32url
       );
