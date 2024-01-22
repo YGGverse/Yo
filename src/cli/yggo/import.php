@@ -128,7 +128,7 @@ for ($i = 0; $i <= $total; $i++)
         if (isset($argv[6]))
         {
             $local = $index->search('')
-                           ->filter('crc32url', $crc32url)
+                           ->filter('id', $crc32url)
                            ->limit(1)
                            ->get();
 
@@ -149,7 +149,6 @@ for ($i = 0; $i <= $total; $i++)
         $index->addDocument(
             [
                 'url'         => $url,
-                'crc32url'    => (int) $crc32url,
                 'time'        => (int) $remote->timeUpdated,
                 'code'        => (int) $remote->httpCode,
                 'size'        => (int) $remote->size,
@@ -157,7 +156,8 @@ for ($i = 0; $i <= $total; $i++)
                 'title'       => (string) $remote->title,
                 'description' => (string) $remote->description,
                 'keywords'    => (string) $remote->keywords
-            ]
+            ],
+            (int) $crc32url
         );
 
         // Result

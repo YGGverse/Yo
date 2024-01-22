@@ -88,7 +88,6 @@ php src/cli/document/crawl.php
 php src/cli/document/clean.php
 ```
 
-* remove `url` duplicates
 * make index optimization
 
 ##### Search

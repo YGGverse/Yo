@@ -98,7 +98,6 @@ foreach($index->search('')
     $data =
     [
         'url'         => $document->get('url'),
-        'crc32url'    => $document->get('crc32url'),
         'title'       => $document->get('title'),
         'description' => $document->get('description'),
         'keywords'    => $document->get('keywords'),
@@ -355,17 +354,20 @@ foreach($index->search('')
                     $crc32url = crc32($url);
 
                     if (!$index->search('')
-                               ->filter('crc32url', $crc32url)
+                               ->filter('id', $crc32url)
                                ->limit(1)
                                ->get()
                                ->getTotal())
                     {
+                        echo 'add';
+                        /*
                         $index->addDocument(
                             [
-                                'url'      => $url,
-                                'crc32url' => $crc32url
-                            ]
+                                'url' => $url
+                            ],
+                            $crc32url
                         );
+                        */
 
                         if ($config->cli->document->crawl->debug->level->notice)
                         {
@@ -383,10 +385,16 @@ foreach($index->search('')
 
         // Replace document data
         // https://github.com/manticoresoftware/manticoresearch-php/issues/10#issuecomment-612685916
+
+        // @TODO optimization for replacements required
+        // https://manual.manticoresearch.com/Data_creation_and_modification/Updating_documents/REPLACE
+        echo 'replace';
+        /*
         $result = $index->replaceDocument(
             $data,
             $document->getId()
         );
+        */
 
         // Debug result
         if ($config->cli->document->crawl->debug->level->notice)

@@ -60,7 +60,7 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
 
     // Check URL for exist
     $exist = $index->search('')
-                   ->filter('crc32url', $crc32url)
+                   ->filter('id', $crc32url)
                    ->limit(1)
                    ->get()
                    ->getTotal();
@@ -82,9 +82,9 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
 
       $index->addDocument(
         [
-          'url'      => $url,
-          'crc32url' => $crc32url
-        ]
+          'url' => $url
+        ],
+        $crc32url
       );
 
       $response = sprintf(
@@ -113,7 +113,7 @@ switch (true)
 
   case filter_var($q, FILTER_VALIDATE_URL):
 
-    $query = $index->search('')->filter('crc32url', crc32($q));
+    $query = $index->search('')->filter('id', crc32($q));
 
   break;
 

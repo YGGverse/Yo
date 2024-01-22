@@ -36,57 +36,6 @@ $index = $client->index(
     $config->manticore->index->document->name
 );
 
-// Get totals
-$total = $index->search('')
-               ->option('cutoff', 0)
-               ->limit(0)
-               ->get()
-               ->getTotal();
-
-// Delete duplicates #5
-$delete = [];
-
-foreach($index->search('')->limit($total)->get() as $queue)
-{
-    $duplicates = $index->search('')->filter('crc32url', $queue->crc32url)->limit($total)->get();
-
-    if ($duplicates->getTotal() > 1)
-    {
-        foreach ($duplicates as $duplicate)
-        {
-            $delete[$duplicate->crc32url][] = $duplicate->getId();
-        }
-    }
-}
-
-$i = 0;
-foreach ($delete as $crc32url => $ids)
-{
-    $j = 0;
-    foreach ($ids as $id)
-    {
-        $i++;
-        $j++;
-
-        // Skip first link
-        if ($j == 1) continue;
-
-        // Delete duplicate
-        $index->deleteDocument($id);
-    }
-}
-
-// Free mem
-$delete = [];
-
-// @TODO $config->cli->document->crawl->skip->stripos->url
-
-// Dump operation result
-echo sprintf(
-    _('duplicated URLs deleted: %s') . PHP_EOL,
-    number_format($i)
-);
-
 // Optimize indexes
 echo _('indexes optimization begin') . PHP_EOL;
 

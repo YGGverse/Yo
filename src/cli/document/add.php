@@ -29,7 +29,7 @@ $crc32url = crc32($url);
 
 // Check URL for exist
 $result = $index->search('')
-                ->filter('crc32url', $crc32url)
+                ->filter('id', $crc32url)
                 ->limit(1)
                 ->get();
 
@@ -47,9 +47,9 @@ if ($result->getTotal())
 // Add
 $result = $index->addDocument(
     [
-        'url'      => $url,
-        'crc32url' => $crc32url
-    ]
+        'url' => $url
+    ],
+    $crc32url
 );
 
 echo sprintf(
