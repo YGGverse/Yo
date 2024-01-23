@@ -224,8 +224,12 @@ foreach($index->search('')
             {
                 if (!empty($value))
                 {
-                    $data['title'] = html_entity_decode(
-                        $value
+                    $data['title'] = trim(
+                        strip_tags(
+                            html_entity_decode(
+                                $value
+                            )
+                        )
                     );
                 }
             }
@@ -239,14 +243,20 @@ foreach($index->search('')
             {
                 if (!empty($value))
                 {
-                    $data['description'] = html_entity_decode(
-                        $value
+                    $data['description'] = trim(
+                        strip_tags(
+                            html_entity_decode(
+                                $value
+                            )
+                        )
                     );
                 }
             }
 
             // Get keywords
-            $keywords = '';
+            $keywords = [];
+
+            // Extract from meta tag
             foreach ($crawler->filter('head > meta[name="keywords"]')->each(function($node) {
 
                 return $node->attr('content');
@@ -255,10 +265,74 @@ foreach($index->search('')
             {
                 if (!empty($value))
                 {
-                    $data['keywords'] = html_entity_decode(
-                        $value
-                    );
+                    foreach ((array) explode(
+                        ',',
+                        mb_strtolower(
+                            strip_tags(
+                                html_entity_decode(
+                                    $value
+                                )
+                            )
+                        )
+                    ) as $keyword)
+                    {
+                        // Remove extra spaces
+                        $keyword = trim(
+                            $keyword
+                        );
+
+                        // Skip short words
+                        if (mb_strlen($keyword) > 2)
+                        {
+                            $keywords[] = $keyword;
+                        }
+                    }
                 }
+            }
+
+            // Get keywords from headers
+            foreach ($crawler->filter('h1,h2,h3,h4,h5,h6')->each(function($node) {
+
+                return $node->text();
+
+            }) as $value)
+            {
+                if (!empty($value))
+                {
+                    foreach ((array) explode(
+                        ',',
+                        mb_strtolower(
+                            strip_tags(
+                                html_entity_decode(
+                                    $value
+                                )
+                            )
+                        )
+                    ) as $keyword)
+                    {
+                        // Remove extra spaces
+                        $keyword = trim(
+                            $keyword
+                        );
+
+                        // Skip short words
+                        if (mb_strlen($keyword) > 2)
+                        {
+                            $keywords[] = $keyword;
+                        }
+                    }
+                }
+            }
+
+            // Keep keywords unique
+            $keywords = array_unique(
+                $keywords
+            );
+
+            // Update previous keywords when new value exists
+            if ($keywords)
+            {
+                $data['keywords'] = implode(',', $keywords);
             }
 
             // Crawl documents
