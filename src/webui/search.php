@@ -140,15 +140,17 @@ switch (true)
     // http://sphinxsearch.com/docs/current/extended-syntax.html
     else
     {
-      // Escape special chars
-      $q = @\Manticoresearch\Utils::escape(
-        $q
+      // Remove separator duplicates
+      $q = trim(
+        preg_replace(
+          '/[\s]+/ui',
+          ' ',
+          $q
+        )
       );
 
-      // Remove separator duplicates
-      $q = preg_replace(
-        '/[\s]+/ui',
-        ' ',
+      // Escape special chars
+      $q = @\Manticoresearch\Utils::escape(
         $q
       );
 
