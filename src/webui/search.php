@@ -140,8 +140,37 @@ switch (true)
     // http://sphinxsearch.com/docs/current/extended-syntax.html
     else
     {
+      // Escape special chars
+      $q = @\Manticoresearch\Utils::escape(
+        $q
+      );
+
+      // Remove separator duplicates
+      $q = preg_replace(
+        '/[\s]+/ui',
+        ' ',
+        $q
+      );
+
+      // Explode search phrase
+      $words = [];
+      foreach ((array) explode(' ', $q) as $word)
+      {
+        $words[] = trim(
+          $word
+        );
+      }
+
+      // Build combined query
       $query = $index->search(
-        @\Manticoresearch\Utils::escape($q)
+        sprintf(
+          '"%s"|%s',
+          $q,
+          implode(
+            '|',
+            $words
+          )
+        )
       );
     }
 }
