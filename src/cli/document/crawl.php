@@ -364,6 +364,8 @@ foreach($index->search('')
                                         [
                                             '/<script([^>]*)>([^<]*)<\/script>/is', // strip js content
                                             '/<style([^>]*)>([^<]*)<\/style>/is', // strip css content
+                                            '/<pre([^>]*)>([^<]*)<\/pre>/is', // strip code content
+                                            '/<code([^>]*)>([^<]*)<\/code>/is',
                                         ],
                                         '',
                                         html_entity_decode(
