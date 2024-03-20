@@ -180,6 +180,8 @@
                             "raw",
                             "cache",
                             "download",
+                            "share",
+                            "explore",
                             "register",
                             "login",
                             "password",
