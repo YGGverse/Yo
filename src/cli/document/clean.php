@@ -37,6 +37,10 @@ $index = $client->index(
 );
 
 // Apply new configuration rules
+/*
+@TODO this case removes some not relevant records, the solution still wanted:
+https://github.com/manticoresoftware/manticoresearch-php/discussions/196
+
 echo _('apply new configuration rules...') . PHP_EOL;
 
 foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
@@ -62,6 +66,7 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
 }
 
 echo _('new configuration rules apply completed.') . PHP_EOL;
+*/
 
 // Optimize indexes
 echo _('indexes optimization begin...') . PHP_EOL;
