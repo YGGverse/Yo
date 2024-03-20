@@ -46,17 +46,13 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
         $condition
     );
 
-    $query = new \Manticoresearch\Query();
-
-    $query->add(
-        'url',
-        @\Manticoresearch\Utils::escape(
-            $condition
-        )
-    );
-
     $result = $index->deleteDocuments(
-        $query
+        $index->search(
+            sprintf(
+                '@url "%s"',
+                $condition
+            )
+        )
     );
 
     echo sprintf(
