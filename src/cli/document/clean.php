@@ -36,9 +36,40 @@ $index = $client->index(
     $config->manticore->index->document->name
 );
 
+// Apply new configuration rules
+echo _('apply new configuration rules...') . PHP_EOL;
+
+foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
+{
+    echo sprintf(
+        _('cleanup documents with url that contain substring "%s"...') . PHP_EOL,
+        $condition
+    );
+
+    $query = new \Manticoresearch\Query();
+
+    $query->add(
+        'url',
+        @\Manticoresearch\Utils::escape(
+            $condition
+        )
+    );
+
+    $result = $index->deleteDocuments(
+        $query
+    );
+
+    echo sprintf(
+        _('documents deleted: %d') . PHP_EOL,
+        $result['deleted']
+    );
+}
+
+echo _('new configuration rules apply completed.') . PHP_EOL;
+
 // Optimize indexes
-echo _('indexes optimization begin') . PHP_EOL;
+echo _('indexes optimization begin...') . PHP_EOL;
 
 $index->optimize();
 
-echo _('indexes optimization completed') . PHP_EOL;
+echo _('indexes optimization completed.') . PHP_EOL;
