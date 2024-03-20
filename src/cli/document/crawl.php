@@ -361,7 +361,10 @@ foreach($index->search('')
                                         PHP_EOL . ' ',
                                     ],
                                     preg_replace(
-                                        '/<script([^>]*)>([^<]*)<\/script>/is', // strip js content
+                                        [
+                                            '/<script([^>]*)>([^<]*)<\/script>/is', // strip js content
+                                            '/<style([^>]*)>([^<]*)<\/style>/is', // strip css content
+                                        ],
                                         '',
                                         html_entity_decode(
                                             $value
