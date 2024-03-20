@@ -47,12 +47,12 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
     );
 
     $result = $index->deleteDocuments(
-        $index->search(
-            sprintf(
-                '@url "%s"',
-                $condition
-            )
-        )
+        [
+            'match' =>
+            [
+                'url' => $condition
+            ]
+        ]
     );
 
     echo sprintf(
