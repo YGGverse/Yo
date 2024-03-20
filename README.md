@@ -67,6 +67,17 @@ php src/cli/index/init.php [reset]
 ```
 * `reset` - optional, reset existing index
 
+##### Alter
+
+Change existing index
+
+```
+php src/cli/index/alter.php {operation} {column} {type}
+```
+* `operation` - operation name, supported values: `add`|`drop`
+* `column` - target column name
+* `type` - target column type, supported values: `text`|`integer`
+
 #### Document
 
 ##### Add
