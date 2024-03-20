@@ -178,6 +178,7 @@
                             "diff",
                             "print",
                             "raw",
+                            "cache",
                             "download",
                             "register",
                             "login",
