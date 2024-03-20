@@ -335,6 +335,45 @@ foreach($index->search('')
                 $data['keywords'] = implode(',', $keywords);
             }
 
+            // Save document body text to index
+            foreach ($crawler->filter('html > body')->each(function($node) {
+
+                return $node->html();
+
+            }) as $value)
+            {
+                if (!empty($value))
+                {
+                    $data['body'] = trim(
+                        preg_replace(
+                            '/[\s]{2,}/', // strip extra separators
+                            ' ',
+                            strip_tags(
+                                str_replace( // make text separators before strip any closing tag, new line, etc
+                                    [
+                                        '<',
+                                        '>',
+                                        PHP_EOL,
+                                    ],
+                                    [
+                                        ' <',
+                                        '> ',
+                                        PHP_EOL . ' ',
+                                    ],
+                                    preg_replace(
+                                        '/<script([^>]*)>([^<]*)<\/script>/is', // strip js content
+                                        '',
+                                        html_entity_decode(
+                                            $value
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    );
+                }
+            }
+
             // Crawl documents
             $documents = [];
 

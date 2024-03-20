@@ -64,6 +64,10 @@ $result = $index->create(
         [
             'type' => 'text'
         ],
+        'body' =>
+        [
+            'type' => 'text'
+        ],
         'mime' =>
         [
             'type' => 'text'
