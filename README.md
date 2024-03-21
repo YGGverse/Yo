@@ -26,14 +26,18 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 
 Application require `manticore`, `composer` and `php`
 
-#### Production
+#### Deployment
 
-* `composer create-project yggverse/yo`
+Project in development, use `dev-main` branch:
+
+* `composer create-project yggverse/yo:dev-main`
 
 #### Development
 
 * `git clone https://github.com/YGGverse/Yo.git`
-* `cd Yo` & `composer update`
+* `cd Yo`
+* `composer update`
+* `git checkout -b pr-branch`
 
 #### Init
 
