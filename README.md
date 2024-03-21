@@ -24,7 +24,17 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 
 ### Install
 
-Application require `manticore`, `composer` and `php`
+#### Environment
+
+##### Debian
+
+`wget https://repo.manticoresearch.com/manticore-repo.noarch.deb`
+`dpkg -i manticore-repo.noarch.deb`
+`apt update`
+`apt install git composer memcached manticore manticore-extra php-fpm php-curl php-mysql php-mbstring`
+
+Yo search engine uses Manticore as the primary database. If your server sensitive to power down,
+change default [binlog flush strategy](https://manual.manticoresearch.com/Logging/Binary_logging#Binary-flushing-strategies) to `binlog_flush = 1`
 
 #### Deployment
 
@@ -38,6 +48,14 @@ Project in development, use `dev-main` branch:
 * `cd Yo`
 * `composer update`
 * `git checkout -b pr-branch`
+* `git commit -m 'new fix'`
+* `git push`
+
+#### Update
+
+* `cd Yo`
+* `git pull`
+* `composer update`
 
 #### Init
 
