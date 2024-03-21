@@ -11,7 +11,7 @@ $config = json_decode(
 );
 
 // Validate request
-if (empty($argv[1]))
+if (!isset($argv[1]))
 {
   exit(
     _('search query required as the first argument!') . PHP_EOL
