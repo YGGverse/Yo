@@ -109,9 +109,9 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
             )
         );
 
-        if (file_exists($location))
+        if (is_dir($location))
         {
-            if (unlink($location))
+            if (rmdir($location))
             {
                 $snaps++;
             }
