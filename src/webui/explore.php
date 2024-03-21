@@ -124,8 +124,8 @@ if ($config->snap->storage->local->enabled)
         'size'   => filesize(
           sprintf(
             '%s/%s',
-            $prefix,
-            $filepath
+            $directory,
+            $filename
           )
         ),
       ];
