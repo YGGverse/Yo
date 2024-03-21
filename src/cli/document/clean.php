@@ -37,10 +37,6 @@ $index = $client->index(
 );
 
 // Apply new configuration rules
-/*
-@TODO this case removes some not relevant records, the solution still wanted:
-https://github.com/manticoresoftware/manticoresearch-php/discussions/196
-
 echo _('apply new configuration rules...') . PHP_EOL;
 
 foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
@@ -50,23 +46,86 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
         $condition
     );
 
-    $result = $index->deleteDocuments(
-        [
-            'match' =>
-            [
-                'url' => $condition
-            ]
-        ]
+    // Process conditions match indexer settings
+    if (
+        isset($config->manticore->index->document->settings->min_word_len)
+        &&
+        mb_strlen($condition) < $config->manticore->index->document->settings->min_word_len
+    ) {
+
+        echo sprintf(
+            _('condition skipped as "min_word_len" value is "%d"') . PHP_EOL,
+            $config->manticore->index->document->settings->min_word_len
+        );
+
+        continue;
+    }
+
+    if (
+        isset($config->manticore->index->document->settings->min_prefix_len)
+        &&
+        mb_strlen($condition) < $config->manticore->index->document->settings->min_prefix_len
+    ) {
+
+        echo sprintf(
+            _('condition skipped as "min_prefix_len" value is "%d"') . PHP_EOL,
+            $config->manticore->index->document->settings->min_prefix_len
+        );
+
+        continue;
+    }
+
+    // Begin search query
+    $documents = 0;
+    $snaps = 0;
+
+    foreach($index->search(sprintf('@url "%s"', $condition))->get() as $document)
+    {
+        // Delete found document by it ID
+        $result = $index->deleteDocument(
+            $document->getId()
+        );
+
+        // Delete local snaps
+        $location = sprintf(
+            '%s/%s',
+            '/' === substr($config->snap->storage->local->directory, 0, 1) ? $config->snap->storage->local->directory
+                                                                           : __DIR__ . '/../../../' . $config->snap->storage->local->directory,
+            implode(
+                '/',
+                str_split(
+                    md5(
+                        $document->get('url')
+                    )
+                )
+            )
+        );
+
+        if (file_exists($location))
+        {
+            if (unlink($location))
+            {
+                $snaps++;
+            }
+        }
+
+        $documents++;
+
+        // @TODO delete remote snaps
+    }
+
+    echo sprintf(
+        _('deleted documents: %d') . PHP_EOL,
+        $documents
     );
 
     echo sprintf(
-        _('documents deleted: %d') . PHP_EOL,
-        $result['deleted']
+        _('deleted local snaps: %d') . PHP_EOL,
+        $snaps
     );
 }
 
 echo _('new configuration rules apply completed.') . PHP_EOL;
-*/
 
 // Optimize indexes
 echo _('indexes optimization begin...') . PHP_EOL;
