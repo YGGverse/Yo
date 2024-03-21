@@ -201,14 +201,37 @@ foreach($index->search('')
         } else continue;
 
         // Update MIME type or skip on empty
-        if ($mime = curl_getinfo($request, CURLINFO_CONTENT_TYPE))
+        if ($type = curl_getinfo($request, CURLINFO_CONTENT_TYPE))
         {
-            $data['mime'] = $mime;
+            $data['mime'] = $type;
+
+            // On document charset specified
+            if (preg_match('/charset=([^\s;]+)/i', $type, $charset))
+            {
+                if (!empty($charset[1]))
+                {
+                    // Get system encodings
+                    foreach (mb_list_encodings() as $encoding)
+                    {
+                        if (strtolower($charset[1]) == strtolower($encoding))
+                        {
+                            // Convert response to UTF-8
+                            $response = mb_convert_encoding(
+                                $response,
+                                'UTF-8',
+                                $charset[1]
+                            );
+
+                            break;
+                        }
+                    }
+                }
+            }
 
         } else continue;
 
         // DOM crawler
-        if (false !== stripos($mime, 'text/html'))
+        if (false !== stripos($type, 'text/html'))
         {
             $crawler = new Symfony\Component\DomCrawler\Crawler();
             $crawler->addHtmlContent(
@@ -579,7 +602,7 @@ foreach($index->search('')
 
                 $snap->addFromString(
                     'MIME',
-                    $mime
+                    $type
                 );
 
                 $snap->addFromString(
@@ -608,7 +631,7 @@ foreach($index->search('')
 
                     foreach ($config->snap->storage->local->mime->stripos as $whitelist)
                     {
-                        if (false !== stripos($mime, $whitelist))
+                        if (false !== stripos($type, $whitelist))
                         {
                             $allowed = true;
                             break;
@@ -707,7 +730,7 @@ foreach($index->search('')
 
                     foreach ($ftp->mime->stripos as $whitelist)
                     {
-                        if (false !== stripos($mime, $whitelist))
+                        if (false !== stripos($type, $whitelist))
                         {
                             $allowed = true;
                             break;
