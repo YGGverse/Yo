@@ -23,10 +23,33 @@ $index = $client->index(
     $config->manticore->index->document->name
 );
 
+// Init search query
+$query = $index->search(
+    $argv[1]
+);
+
+// Apply search options (e.g. field_weights)
+foreach ($config->webui->search->options as $key => $value)
+{
+  if (is_int($value) || is_string($value))
+  {
+    $query->option(
+      $key,
+      $value
+    );
+  }
+
+  else
+  {
+    $query->option(
+      $key,
+      (array) $value
+    );
+  }
+}
+
 // Search
-foreach($index->search($argv[1])
-              ->limit($argv[2] ? $argv[2] : 10)
-              ->get() as $result)
+foreach($query->limit($argv[2] ? $argv[2] : 10)->get() as $result)
 {
     var_dump(
         $result
