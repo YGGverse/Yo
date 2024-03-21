@@ -314,6 +314,8 @@ foreach($index->search('')
             }
 
             // Get keywords from headers
+            /* Disable keywords collection from headers as body index enabled
+
             foreach ($crawler->filter('h1,h2,h3,h4,h5,h6')->each(function($node) {
 
                 return $node->text();
@@ -346,6 +348,7 @@ foreach($index->search('')
                     }
                 }
             }
+            */
 
             // Keep keywords unique
             $keywords = array_unique(
