@@ -150,13 +150,13 @@ switch (true)
       );
 
       // Escape special chars
-      $q = @\Manticoresearch\Utils::escape(
+      $request = @\Manticoresearch\Utils::escape(
         $q
       );
 
       // Explode search phrase
       $words = [];
-      foreach ((array) explode(' ', $q) as $word)
+      foreach ((array) explode(' ', $request) as $word)
       {
         $words[] = trim(
           $word
@@ -167,7 +167,7 @@ switch (true)
       $query = $index->search(
         sprintf(
           '"%s"|%s',
-          $q,
+          $request,
           implode(
             '|',
             $words
