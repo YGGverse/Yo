@@ -575,7 +575,7 @@ foreach($index->search('')
                 );
 
                 /// absolute
-                if ('/' === substr($config->snap->storage->tmp->directory, 0, 1))
+                if (str_starts_with($config->snap->storage->tmp->directory, '/'))
                 {
                     $filepath = $config->snap->storage->tmp->directory;
                 }
@@ -671,7 +671,7 @@ foreach($index->search('')
                     if ($allowed)
                     {
                         /// absolute
-                        if ('/' === substr($config->snap->storage->local->directory, 0, 1))
+                        if (str_starts_with($config->snap->storage->local->directory, '/'))
                         {
                             $filepath = $config->snap->storage->local->directory;
                         }

@@ -97,7 +97,7 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
         // Delete local snaps
         $location = sprintf(
             '%s/%s',
-            '/' === substr($config->snap->storage->local->directory, 0, 1) ? $config->snap->storage->local->directory
+            str_starts_with($config->snap->storage->local->directory, '/') ? $config->snap->storage->local->directory // absolute path
                                                                            : __DIR__ . '/../../../' . $config->snap->storage->local->directory,
             implode(
                 '/',
