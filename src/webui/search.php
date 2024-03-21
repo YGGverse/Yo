@@ -481,7 +481,15 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
             </div>
           <?php } ?>
           <div>
-            <a href="<?php echo $result->url ?>"><?php echo htmlentities(urldecode($result->url)) ?></a>
+            <?php if (!empty($result->getHighlight()['url'])) { ?>
+              <?php foreach ($result->getHighlight()['url'] as $url) { ?>
+                <p>
+                  <a href="<?php echo $result->url ?>"><?php echo urldecode($url) ?></a>
+                </p>
+              <?php } ?>
+            <?php } else if (!empty($result->title)) { ?>
+              <a href="<?php echo $result->url ?>"><?php echo htmlentities(urldecode($result->url)) ?></a>
+            <?php } ?>
             <?php if (!in_array($result->get('code'), [0, 200])) { ?>
               <small>&bull;</small>
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" class="text-warning" viewBox="0 0 16 16">
