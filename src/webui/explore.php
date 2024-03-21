@@ -439,6 +439,10 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
               <?php } ?>
             </ul>
           <?php } ?>
+          <?php if (!empty($document->body)) { ?>
+            <h3><?php echo _('Cache') ?></h3>
+            <pre><?php echo htmlentities($document->body) ?></pre>
+          <?php } ?>
         </div>
       <?php } else { ?>
         <div>
