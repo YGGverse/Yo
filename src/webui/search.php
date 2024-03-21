@@ -358,10 +358,6 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         margin: 8px 0;
       }
 
-      p {
-        font-size: 11px;
-      }
-
       .text-warning {
         color: #db6161;
         fill: #db6161;
@@ -449,36 +445,46 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
           ?>
           <img src="<?php echo $icon ?>" title="<?php echo $hostname ?>" alt="identicon" />
           <?php if (!empty($result->getHighlight()['title'])) { ?>
-            <?php foreach ($result->getHighlight()['title'] as $title) { ?>
-              <div>
-                <h2><?php echo $title ?></h2>
-              </div>
-            <?php } ?>
+            <div>
+              <h2>
+                <?php foreach ($result->getHighlight()['title'] as $title) { ?>
+                  <p><?php echo $title ?></p>
+                <?php } ?>
+              </h2>
+            </div>
           <?php } else if (!empty($result->title)) { ?>
             <div>
               <h2><?php echo $result->title ?></h2>
             </div>
           <?php } ?>
           <?php if (!empty($result->getHighlight()['description'])) { ?>
-            <?php foreach ($result->getHighlight()['description'] as $description) { ?>
-              <div><?php echo $description ?></div>
-            <?php } ?>
+            <div>
+              <?php foreach ($result->getHighlight()['description'] as $description) { ?>
+                <p><?php echo $description ?></p>
+              <?php } ?>
+            </div>
           <?php } else if (!empty($result->description)) { ?>
-            <div><?php echo $result->description ?></div>
+            <div>
+              <?php echo $result->description ?>
+            </div>
           <?php } ?>
           <?php if (!empty($result->getHighlight()['keywords'])) { ?>
-            <?php foreach ($result->getHighlight()['keywords'] as $keywords) { ?>
-              <div><?php echo $keywords ?></div>
-            <?php } ?>
+            <div>
+              <?php foreach ($result->getHighlight()['keywords'] as $keywords) { ?>
+                <p><?php echo $keywords ?></p>
+              <?php } ?>
+            </div>
           <?php } else if (!empty($result->keywords)) { ?>
             <div>
               <?php echo $result->keywords ?>
             </div>
           <?php } ?>
           <?php if (!empty($result->getHighlight()['body'])) { ?>
-            <?php foreach ($result->getHighlight()['body'] as $body) { ?>
-              <div><?php echo $body ?></div>
-            <?php } ?>
+            <div>
+              <?php foreach ($result->getHighlight()['body'] as $body) { ?>
+                <p><?php echo $body ?></p>
+              <?php } ?>
+            </div>
           <?php } ?>
           <div>
             <a href="<?php echo $result->url ?>"><?php echo htmlentities(urldecode($result->url)) ?></a>
