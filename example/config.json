@@ -42,6 +42,17 @@
             "extended":
             {
                 "enabled":false
+            },
+            "options":
+            {
+                "field_weights":
+                {
+                    "url": 100,
+                    "title": 200,
+                    "description": 300,
+                    "keywords": 400,
+                    "body": 500
+                }
             }
         },
         "footer":

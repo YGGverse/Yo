@@ -177,6 +177,26 @@ switch (true)
     }
 }
 
+// Apply search options (e.g. field_weights)
+foreach ($config->webui->search->options as $key => $value)
+{
+  if (is_int($value) || is_string($value))
+  {
+    $query->option(
+      $key,
+      $value
+    );
+  }
+
+  else
+  {
+    $query->option(
+      $key,
+      (array) $value
+    );
+  }
+}
+
 // Get found
 $found = empty($q) ? $total : $query->get()->getTotal();
 
