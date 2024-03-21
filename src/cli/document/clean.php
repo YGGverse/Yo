@@ -83,12 +83,20 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
         $index->search(
             sprintf(
                 '@url "%s"',
-                $condition
+                @\Manticoresearch\Utils::escape(
+                    $condition
+                )
             )
         )->limit(
             isset($argv[1]) ? (int) $argv[1] : 10
         )->get() as $document)
     {
+        // Make sure document contain exact substring in URL
+        if (false === mb_strpos($document->get('url'), $condition))
+        {
+            continue;
+        }
+
         // Delete found document by it ID
         $result = $index->deleteDocument(
             $document->getId()
