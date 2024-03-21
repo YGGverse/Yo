@@ -99,11 +99,13 @@ php src/cli/document/crawl.php
 
 ##### Clean
 
+Make index optimization, apply new configuration rules
+
 ```
-php src/cli/document/clean.php
+php src/cli/document/clean.php [limit]
 ```
 
-* make index optimization
+* `limit` - integer, documents quantity per queue
 
 ##### Search
 

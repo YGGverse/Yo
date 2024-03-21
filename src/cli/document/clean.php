@@ -79,7 +79,15 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
     $documents = 0;
     $snaps = 0;
 
-    foreach($index->search(sprintf('@url "%s"', $condition))->get() as $document)
+    foreach(
+        $index->search(
+            sprintf(
+                '@url "%s"',
+                $condition
+            )
+        )->limit(
+            isset($argv[1]) ? (int) $argv[1] : 10
+        )->get() as $document)
     {
         // Delete found document by it ID
         $result = $index->deleteDocument(
