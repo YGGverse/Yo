@@ -10,6 +10,14 @@ $config = json_decode(
     )
 );
 
+// Validate request
+if (empty($argv[1]))
+{
+  exit(
+    _('search query required as the first argument!') . PHP_EOL
+  );
+}
+
 // Init client
 $client = new \Manticoresearch\Client(
     [
@@ -25,7 +33,7 @@ $index = $client->index(
 
 // Search
 foreach($index->search($argv[1])
-              ->limit($argv[2] ? $argv[2] : 10)
+              ->limit(isset($argv[2]) ? (int) $argv[2] : 10)
               ->get() as $result)
 {
     var_dump(
