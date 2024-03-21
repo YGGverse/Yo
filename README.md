@@ -31,7 +31,7 @@ Yo! is the super thin layer for Manticore search server that extends official [m
 * `wget https://repo.manticoresearch.com/manticore-repo.noarch.deb`
 * `dpkg -i manticore-repo.noarch.deb`
 * `apt update`
-* `apt install git composer manticore manticore-extra php-fpm php-curl php-mysql php-mbstring`
+* `apt install git composer manticore manticore-extra php-fpm php-curl php-mbstring`
 
 Yo search engine uses Manticore as the primary database. If your server sensitive to power down,
 change default [binlog flush strategy](https://manual.manticoresearch.com/Logging/Binary_logging#Binary-flushing-strategies) to `binlog_flush = 1`
