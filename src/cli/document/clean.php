@@ -82,7 +82,7 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
     foreach(
         $index->search(
             sprintf(
-                '@url %s',
+                '@url "*%s*"',
                 @\Manticoresearch\Utils::escape(
                     $condition
                 )
