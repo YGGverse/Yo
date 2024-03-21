@@ -38,7 +38,7 @@ change default [binlog flush strategy](https://manual.manticoresearch.com/Loggin
 
 #### Deployment
 
-Project in development, use `dev-main` branch:
+Project in development, to create new search project, use `dev-main` branch:
 
 * `composer create-project yggverse/yo:dev-main`
 
