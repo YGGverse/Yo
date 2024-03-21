@@ -47,11 +47,27 @@
             {
                 "field_weights":
                 {
-                    "url": 100,
-                    "title": 200,
-                    "description": 300,
-                    "keywords": 400,
-                    "body": 500
+                    "url":100,
+                    "title":200,
+                    "description":300,
+                    "keywords":400,
+                    "body":500
+                }
+            },
+            "highlight":
+            {
+                "fields":
+                [
+                    "url",
+                    "title",
+                    "description",
+                    "keywords",
+                    "body"
+                ],
+                "options":
+                {
+                    "around":5,
+                    "limit":140
                 }
             }
         },
