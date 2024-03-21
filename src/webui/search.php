@@ -115,12 +115,14 @@ if ($config->webui->search->index->request->url->enabled && filter_var($q, FILTE
 // Extended corrections
 switch (true)
 {
+  // Empty query
   case empty($q):
 
     $query = $index->search('')->sort('RAND()');
 
   break;
 
+  // URL request
   case filter_var($q, FILTER_VALIDATE_URL):
 
     $query = $index->search('')->filter('id', crc32($q));
@@ -136,42 +138,12 @@ switch (true)
       $query = $index->search($q);
     }
 
-    // Escape reserved chars
-    // http://sphinxsearch.com/docs/current/extended-syntax.html
+    // Regular request
     else
     {
-      // Remove separator duplicates
-      $q = trim(
-        preg_replace(
-          '/[\s]+/ui',
-          ' ',
-          $q
-        )
-      );
-
-      // Escape special chars
-      $request = @\Manticoresearch\Utils::escape(
-        $q
-      );
-
-      // Explode search phrase
-      $words = [];
-      foreach ((array) explode(' ', $request) as $word)
-      {
-        $words[] = trim(
-          $word
-        );
-      }
-
-      // Build combined query
       $query = $index->search(
-        sprintf(
-          '"%s"|%s',
-          $request,
-          implode(
-            '|',
-            $words
-          )
+        @\Manticoresearch\Utils::escape(
+          $q
         )
       );
     }
