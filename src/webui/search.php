@@ -245,6 +245,12 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
         line-height: 16px;
       }
 
+      main > div > div > b
+      main > div > div > a > b {
+        color: #dbb133;
+        font-weight: bold;
+      }
+
       main > div > div > a {
         font-size: 12px;
       }
