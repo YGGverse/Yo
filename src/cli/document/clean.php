@@ -87,6 +87,12 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
                     $condition
                 )
             )
+        )->expression(
+            'random',
+            'rand()'
+        )->sort(
+            'random',
+            'asc'
         )->limit(
             isset($argv[1]) ? (int) $argv[1] : 10
         )->get() as $document)
