@@ -256,6 +256,18 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
         margin: 4px 0;
       }
 
+      pre {
+        border-radius: 4px;
+        border: 1px #000 dashed;
+        font-size: 13px;
+        margin: 8px 0;
+        max-height: 180px;
+        overflow: auto;
+        padding: 8px;
+        position: relative;
+        white-space: pre-wrap;
+      }
+
       form {
         display: block;
         max-width: 678px;
