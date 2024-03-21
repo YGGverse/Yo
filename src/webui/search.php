@@ -483,7 +483,6 @@ $results = $query->offset($p * $config->webui->pagination->limit - $config->webu
           <div>
             <?php if (!empty($result->getHighlight()['url'])) { ?>
               <?php foreach ($result->getHighlight()['url'] as $url) { ?>
-                <br />
                 <a href="<?php echo $result->url ?>"><?php echo urldecode($url) ?></a>
               <?php } ?>
             <?php } else if (!empty($result->title)) { ?>
