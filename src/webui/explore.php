@@ -193,7 +193,10 @@ if ($config->webui->index->enabled)
     );
 
     header(
-      'Refresh:0'
+      sprintf(
+        'Location: explore.php?i=%d',
+        $document->getId()
+      )
     );
   }
 
