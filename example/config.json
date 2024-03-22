@@ -121,6 +121,10 @@
                     "index":[]
                 }
             ]
+        },
+        "reindex":
+        {
+            "enabled":true
         }
     },
     "cli":

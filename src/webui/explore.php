@@ -77,7 +77,9 @@ $icon = $identicon->getImageDataUri('webp');
 $snaps = [];
 
 /// Prepare location
-$md5url = md5($document->url);
+$md5url = md5(
+  $document->url
+);
 
 $filepath = implode(
   '/',
@@ -174,6 +176,28 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
 
     $remote->close();
   }
+}
+
+// Process reindex request
+if ($config->webui->reindex->enabled)
+{
+  session_start();
+
+  if (isset($_POST['captcha']) && $_POST['captcha'] == $_SESSION['captcha'])
+  {
+    $index->updateDocument(
+      [
+        'reindex' => time()
+      ],
+      $document->getId()
+    );
+  }
+
+  $captcha = new \Gregwar\Captcha\CaptchaBuilder();
+  $captcha->setBackgroundColor(46, 52, 54);
+  $captcha->build();
+
+  $_SESSION['captcha'] = $captcha->getPhrase();
 }
 
 ?>
@@ -275,9 +299,13 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
         text-align: center;
       }
 
-      input,
-      input:-webkit-autofill,
-      input:-webkit-autofill:focus {
+      fieldset {
+        width: 150px;
+      }
+
+      input[type="text"],
+      input[type="text"]:-webkit-autofill,
+      input[type="text"]:-webkit-autofill:focus {
         transition: background-color 0s 600000s, color 0s 600000s; /* chrome */
         width: 100%;
         margin: 12px 0;
@@ -289,16 +317,16 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
         text-align: center;
       }
 
-      input:hover {
+      input[type="text"]:hover {
         background-color: #111
       }
 
-      input:focus {
+      input[type="text"]:focus {
         outline: none;
         background-color: #111
       }
 
-      input:focus::placeholder {
+      input[type="text"]:focus::placeholder {
         color: #090808
       }
 
@@ -321,13 +349,18 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
         background-color: #3394fb;
         color: #fff;
         font-size: 14px;
+      }
+
+      button {
+        background-color: #4b9df4;
+        height: 32px;
+        vertical-align: top;
+      }
+
+      header button {
         position: fixed;
         top: 12px;
         right: 24px;
-      }
-
-      button:hover {
-        background-color: #4b9df4;
       }
 
       a, a:visited, a:active {
@@ -454,6 +487,36 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
           <?php if (!empty($document->body)) { ?>
             <h3><?php echo _('Cache') ?></h3>
             <pre><?php echo htmlentities($document->body) ?></pre>
+          <?php } ?>
+          <?php if ($config->webui->reindex->enabled) { ?>
+            <h3><?php echo _('Reindex') ?></h3>
+            <div>
+              <?php if ($document->get('reindex')) { ?>
+                <?php echo sprintf(_('Request sent at %s'), date('c', $document->get('reindex'))) ?>
+              <?php } else { ?>
+                <img src="<?php echo $captcha->inline(100) ?>" alt="captcha" />
+                <form name="reindex" method="POST" action="explore.php?i=<?php echo $document->getId() ?>">
+                  <fieldset>
+                    <input type="text"
+                           name="captcha"
+                           value=""
+                           placeholder="<?php echo _('Code on picture'); ?>"
+                           autocomplete="off" />
+                    <button type="submit">
+                      <?php echo _('Request') ?>
+                    </button>
+                    <button type="submit">
+                      <sub>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 16 16">
+                          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                        </svg>
+                      </sub>
+                    </button>
+                  </fieldset>
+                </form>
+              <?php } ?>
+            </div>
           <?php } ?>
         </div>
       <?php } else { ?>

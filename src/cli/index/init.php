@@ -87,6 +87,10 @@ $result = $index->create(
         'time' =>
         [
             'type' => 'integer'
+        ],
+        'reindex' =>
+        [
+            'type' => 'integer'
         ]
     ],
     (array) $config->manticore->index->document->settings

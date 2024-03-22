@@ -87,6 +87,7 @@ if ($config->cli->document->crawl->debug->level->notice)
 
 foreach($index->search('')
               ->expression('random', 'rand()')
+              ->sort('reindex', 'desc')
               ->sort('time', 'asc')
               ->sort('rank', 'asc')
               ->sort('random', 'asc')
@@ -106,7 +107,8 @@ foreach($index->search('')
         'size'        => $document->get('size'),
         'mime'        => $document->get('mime'),
         'rank'        => $document->get('rank'),
-        'time'        => $time
+        'time'        => $time,
+        'reindex'     => 0
     ];
 
     // Debug target
