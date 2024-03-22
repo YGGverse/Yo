@@ -488,7 +488,7 @@ if ($config->webui->reindex->enabled)
             <h3><?php echo _('Cache') ?></h3>
             <pre><?php echo htmlentities($document->body) ?></pre>
           <?php } ?>
-          <?php if ($config->webui->reindex->enabled) { ?>
+          <?php if ($config->webui->reindex->enabled && $document->get('time')) { ?>
             <h3><?php echo _('Reindex') ?></h3>
             <div>
               <?php if ($document->get('reindex')) { ?>
