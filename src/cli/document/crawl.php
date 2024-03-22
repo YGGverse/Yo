@@ -231,8 +231,13 @@ foreach($index->search('')
         } else continue;
 
         // DOM crawler
-        if (false !== stripos($type, 'text/html'))
-        {
+        if (
+            false !== stripos($type, 'text/html')
+            ||
+            false !== stripos($type, 'text/xhtml')
+            ||
+            false !== stripos($type, 'application/xhtml')
+        ) {
             $crawler = new Symfony\Component\DomCrawler\Crawler();
             $crawler->addHtmlContent(
                 $response
