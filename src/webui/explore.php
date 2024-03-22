@@ -178,8 +178,8 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
   }
 }
 
-// Process reindex request
-if ($config->webui->reindex->enabled)
+// Process index request
+if ($config->webui->index->enabled)
 {
   session_start();
 
@@ -187,7 +187,7 @@ if ($config->webui->reindex->enabled)
   {
     $index->updateDocument(
       [
-        'reindex' => time()
+        'index' => time()
       ],
       $document->getId()
     );
@@ -488,14 +488,14 @@ if ($config->webui->reindex->enabled)
             <h3><?php echo _('Cache') ?></h3>
             <pre><?php echo htmlentities($document->body) ?></pre>
           <?php } ?>
-          <?php if ($config->webui->reindex->enabled && $document->get('time')) { ?>
-            <h3><?php echo _('Reindex') ?></h3>
+          <?php if ($config->webui->index->enabled && $document->get('time')) { ?>
+            <h3><?php echo _('Index') ?></h3>
             <div>
-              <?php if ($document->get('reindex')) { ?>
-                <?php echo sprintf(_('Request sent at %s'), date('c', $document->get('reindex'))) ?>
+              <?php if ($document->get('index')) { ?>
+                <?php echo sprintf(_('Request sent at %s'), date('c', $document->get('index'))) ?>
               <?php } else { ?>
                 <img src="<?php echo $captcha->inline(100) ?>" alt="captcha" />
-                <form name="reindex" method="POST" action="explore.php?i=<?php echo $document->getId() ?>">
+                <form name="index" method="POST" action="explore.php?i=<?php echo $document->getId() ?>">
                   <fieldset>
                     <input type="text"
                            name="captcha"

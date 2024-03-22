@@ -88,7 +88,7 @@ $result = $index->create(
         [
             'type' => 'integer'
         ],
-        'reindex' =>
+        'index' =>
         [
             'type' => 'integer'
         ]
