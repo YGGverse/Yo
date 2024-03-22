@@ -388,10 +388,10 @@ foreach($index->search('')
                                     ],
                                     preg_replace(
                                         [
-                                            '/<script([^>]*)>([^<]*)<\/script>/is', // strip js content
-                                            '/<style([^>]*)>([^<]*)<\/style>/is', // strip css content
-                                            '/<pre([^>]*)>([^<]*)<\/pre>/is', // strip code content
-                                            '/<code([^>]*)>([^<]*)<\/code>/is',
+                                            '/<script([^>]*)>([\s\S]*?)<\/script>/i', // strip js content
+                                            '/<style([^>]*)>([\s\S]*?)<\/style>/i', // strip css content
+                                            '/<pre([^>]*)>([\s\S]*?)<\/pre>/i', // strip code content
+                                            '/<code([^>]*)>([\s\S]*?)<\/code>/i',
                                         ],
                                         '',
                                         html_entity_decode(
