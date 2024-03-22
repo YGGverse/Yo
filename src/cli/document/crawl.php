@@ -6,6 +6,37 @@ $microtime = microtime(true);
 // Load dependencies
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+// Define helpers
+function getLastSnapTime(array $files): int
+{
+    $time = [];
+
+    foreach ($files as $file)
+    {
+        if (in_array($file, ['.', '..']))
+        {
+            continue;
+        }
+
+        $time[] = preg_replace(
+            '/\D/',
+            '',
+            basename(
+                $file
+            )
+        );
+    }
+
+    if ($time)
+    {
+        return max(
+            $time
+        );
+    }
+
+    return 0;
+}
+
 // Init config
 $config = json_decode(
     file_get_contents(
@@ -702,24 +733,51 @@ foreach($index->search('')
 
                         @mkdir($filepath, 0755, true);
 
-                        $filename = sprintf(
-                            '%s/%s',
-                            $filepath,
-                            sprintf(
-                                '%s.tar.gz',
-                                $time
-                            )
-                        );
-
-                        if (!copy($tmp, $filename))
+                        // Check latest snap older than defined in settings
+                        if (time() - getLastSnapTime((array) scandir($filepath)) > $config->cli->document->crawl->snap->timeout)
                         {
-                            if ($config->cli->document->crawl->debug->level->error)
+                            $filename = sprintf(
+                                '%s/%s',
+                                $filepath,
+                                sprintf(
+                                    '%s.tar.gz',
+                                    $time
+                                )
+                            );
+
+                            if (copy($tmp, $filename))
+                            {
+                                if ($config->cli->document->crawl->debug->level->notice)
+                                {
+                                    echo sprintf(
+                                        _('[%s] [notice] save snap to "%s" on local storage') . PHP_EOL,
+                                        date('c'),
+                                        $filename
+                                    );
+                                }
+                            }
+
+                            else
+                            {
+                                if ($config->cli->document->crawl->debug->level->error)
+                                {
+                                    echo sprintf(
+                                        _('[%s] [error] could not copy "%s" to "%s" on local storage') . PHP_EOL,
+                                        date('c'),
+                                        $tmp,
+                                        $filename
+                                    );
+                                }
+                            }
+                        }
+
+                        else
+                        {
+                            if ($config->cli->document->crawl->debug->level->notice)
                             {
                                 echo sprintf(
-                                    _('[%s] [error] could not copy "%" to "%" on local storage') . PHP_EOL,
-                                    date('c'),
-                                    $tmp,
-                                    $filename
+                                    _('[%s] [notice] local snap is up to date by timeout settings') . PHP_EOL,
+                                    date('c')
                                 );
                             }
                         }
@@ -824,16 +882,45 @@ foreach($index->search('')
                                 true
                             );
 
-                            if (!$remote->copy($tmp, $filename))
+                            // Check latest snap older than defined in settings
+                            if (time() - getLastSnapTime((array) $remote->nlist($filepath)) > $config->cli->document->crawl->snap->timeout)
                             {
-                                if ($config->cli->document->crawl->debug->level->error)
+                                if ($remote->copy($tmp, $filename))
+                                {
+                                    if ($config->cli->document->crawl->debug->level->notice)
+                                    {
+                                        echo sprintf(
+                                            _('[%s] [notice] save snap to "%s" on remote host "%s"') . PHP_EOL,
+                                            date('c'),
+                                            $filename,
+                                            $ftp->connection->host
+                                        );
+                                    }
+                                }
+
+                                else
+                                {
+                                    if ($config->cli->document->crawl->debug->level->error)
+                                    {
+                                        echo sprintf(
+                                            _('[%s] [error] could not copy snap "%s" to "%s" on destination "%s"') . PHP_EOL,
+                                            date('c'),
+                                            $tmp,
+                                            $filename,
+                                            $ftp->connection->host
+                                        );
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                if ($config->cli->document->crawl->debug->level->notice)
                                 {
                                     echo sprintf(
-                                        _('[%s] [error] could not copy "%" to "%" on destination "%s"') . PHP_EOL,
+                                        _('[%s] [notice] remote snap on destination "%s" is up to date by timeout settings') . PHP_EOL,
                                         date('c'),
-                                        $tmp,
-                                        $filename,
-                                        $ftp->connection->host,
+                                        $ftp->connection->host
                                     );
                                 }
                             }
@@ -887,7 +974,7 @@ foreach($index->search('')
                     if ($config->cli->document->crawl->debug->level->notice)
                     {
                         echo sprintf(
-                            _('[%s] [notice] remove tmp snap file %s') . PHP_EOL,
+                            _('[%s] [notice] remove tmp snap file "%s"') . PHP_EOL,
                             date('c'),
                             $tmp
                         );
@@ -899,7 +986,7 @@ foreach($index->search('')
                     if ($config->cli->document->crawl->debug->level->error)
                     {
                         echo sprintf(
-                            _('[%s] [error] could not remove tmp snap file %s') . PHP_EOL,
+                            _('[%s] [error] could not remove tmp snap file "%s"') . PHP_EOL,
                             date('c'),
                             $tmp
                         );

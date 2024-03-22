@@ -256,7 +256,8 @@
                 },
                 "snap":
                 {
-                    "enabled":true
+                    "enabled":true,
+                    "timeout":2592000
                 }
             }
         }
