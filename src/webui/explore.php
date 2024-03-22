@@ -495,7 +495,7 @@ if ($config->webui->index->enabled)
             <h3><?php echo _('Cache') ?></h3>
             <pre><?php echo htmlentities($document->body) ?></pre>
           <?php } ?>
-          <?php if ($config->webui->index->enabled && $document->get('time')) { ?>
+          <?php if ($config->webui->index->enabled) { ?>
             <h3><?php echo _('Index') ?></h3>
             <div>
               <?php if ($document->get('index')) { ?>
