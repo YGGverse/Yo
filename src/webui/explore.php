@@ -379,7 +379,7 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
     <main>
       <?php if ($document) { ?>
         <div>
-          <?php if (empty($document->time) || (empty($document->title) && empty($document->description) && empty($document->keywords))) { ?>
+          <?php if (empty($document->time)) { ?>
             <div>
               <?php echo _('Document pending for crawler queue') ?>
             </div>
