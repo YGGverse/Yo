@@ -782,6 +782,17 @@ foreach($index->search('')
                             }
                         }
                     }
+
+                    else
+                    {
+                        if ($config->cli->document->crawl->debug->level->notice)
+                        {
+                            echo sprintf(
+                                _('[%s] [notice] local snap skipped by settings condition') . PHP_EOL,
+                                date('c')
+                            );
+                        }
+                    }
                 }
 
                 // Copy to FTP storage on enabled
@@ -837,6 +848,15 @@ foreach($index->search('')
 
                     if (!$allowed)
                     {
+                        if ($config->cli->document->crawl->debug->level->notice)
+                        {
+                            echo sprintf(
+                                _('[%s] [notice] remote snap skipped on "%s" by settings condition') . PHP_EOL,
+                                date('c'),
+                                $ftp->connection->host
+                            );
+                        }
+
                         continue;
                     }
 
