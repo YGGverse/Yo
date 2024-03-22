@@ -191,6 +191,10 @@ if ($config->webui->index->enabled)
       ],
       $document->getId()
     );
+
+    header(
+      'Refresh:0'
+    );
   }
 
   $captcha = new \Gregwar\Captcha\CaptchaBuilder();
