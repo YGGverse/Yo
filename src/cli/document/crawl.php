@@ -203,11 +203,19 @@ foreach($index->search('')
             $upload,
             $uploaded
         ) {
+            global $request;
+
             global $index;
             global $document;
 
+            if (!$mime = curl_getinfo($request, CURLINFO_CONTENT_TYPE))
+            {
+                $mime = $document->get('mime');
+            }
+
             $index->updateDocument(
                 [
+                    'mime'  => $mime,
                     'time'  => time(),
                     'code'  => 200,
                     'index' => 0
