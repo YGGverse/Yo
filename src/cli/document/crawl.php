@@ -65,12 +65,6 @@ if (false === sem_acquire($semaphore, true))
     exit;
 }
 
-// Set global options
-define(
-    'CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX',
-    $config->cli->document->crawl->curl->download->size->max
-);
-
 // Init client
 try {
 
@@ -203,6 +197,7 @@ foreach($index->search('')
             $upload,
             $uploaded
         ) {
+            global $config;
             global $request;
 
             global $index;
@@ -223,7 +218,7 @@ foreach($index->search('')
                 $document->getId()
             );
 
-            return $downloaded > CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX ? 1 : 0;
+            return $downloaded > $config->cli->document->crawl->curl->download->size->max ? 1 : 0;
         }
     );
 
