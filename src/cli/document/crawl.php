@@ -114,7 +114,6 @@ foreach($index->search('')
               ->expression('random', 'rand()')
               ->sort('index', 'desc')
               ->sort('time', 'asc')
-              ->sort('rank', 'asc')
               ->sort('random', 'asc')
               ->limit($config->cli->document->crawl->queue->limit)
               ->get() as $document)
@@ -564,17 +563,7 @@ foreach($index->search('')
 
                         $index->addDocument(
                             [
-                                'url'  => $url,
-                                'rank' => (int) mb_strlen(
-                                    (string)
-                                    urldecode(
-                                        (string)
-                                        parse_url(
-                                            $url,
-                                            PHP_URL_PATH
-                                        )
-                                    )
-                                )
+                                'url'  => $url
                             ],
                             $crc32url
                         );
