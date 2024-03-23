@@ -421,7 +421,7 @@ if ($config->webui->index->enabled)
         <div>
           <?php if (empty($document->time)) { ?>
             <div>
-              <?php echo _('Document pending for crawler queue') ?>
+              <?php echo _('Document pending for crawler in queue') ?>
             </div>
           <?php } else { ?>
             <?php if (!empty($document->title)) { ?>
