@@ -156,8 +156,9 @@ foreach($index->search('')
     // Update index time anyway and set reset code to 404
     $index->updateDocument(
         [
-            'time' => time(),
-            'code' => 404
+            'time'  => time(),
+            'code'  => 200,
+            'index' => 0
         ],
         $document->getId()
     );
@@ -207,8 +208,8 @@ foreach($index->search('')
 
             $index->updateDocument(
                 [
-                    'code'  => 200,
                     'time'  => time(),
+                    'code'  => 200,
                     'index' => 0
                 ],
                 $document->getId()
