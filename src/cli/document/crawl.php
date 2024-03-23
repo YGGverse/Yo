@@ -202,6 +202,17 @@ foreach($index->search('')
             $upload,
             $uploaded
         ) {
+            global $index;
+            global $document;
+
+            $index->updateDocument(
+                [
+                    'time' => time(),
+                    'code' => 200
+                ],
+                $document->getId()
+            );
+
             return $downloaded > CONFIG_CLI_DOCUMENT_CRAWL_CURL_DOWNLOAD_SIZE_MAX ? 1 : 0;
         }
     );
