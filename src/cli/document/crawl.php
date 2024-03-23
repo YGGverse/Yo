@@ -207,8 +207,9 @@ foreach($index->search('')
 
             $index->updateDocument(
                 [
-                    'time' => time(),
-                    'code' => 200
+                    'code'  => 200,
+                    'time'  => time(),
+                    'index' => 0
                 ],
                 $document->getId()
             );
