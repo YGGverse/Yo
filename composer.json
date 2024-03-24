@@ -19,6 +19,7 @@
         "symfony/dom-crawler": "^6.3",
         "jdenticon/jdenticon": "^1.0",
         "yggverse/ftp": "^1.0",
-        "gregwar/captcha": "^1.2"
+        "gregwar/captcha": "^1.2",
+        "yggverse/net": "^1.2"
     }
 }

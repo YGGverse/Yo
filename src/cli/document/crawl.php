@@ -65,6 +65,65 @@ if (false === sem_acquire($semaphore, true))
     exit;
 }
 
+// Check network connection
+if ($config->network->check->enabled)
+{
+    $network = false;
+
+    foreach ($config->network->check->socket as $host => $port)
+    {
+        if ($config->cli->document->crawl->debug->level->notice)
+        {
+            echo sprintf(
+                _('[%s] [notice] check network connection to socket "%s" port "%d"...') . PHP_EOL,
+                date('c'),
+                $host,
+                $port
+            );
+        }
+
+        if (\Yggverse\Net\Socket::isOpen($host, $port, $config->network->check->timeout))
+        {
+            if ($config->cli->document->crawl->debug->level->notice)
+            {
+                echo sprintf(
+                    _('[%s] [notice] network connection test successful') . PHP_EOL,
+                    date('c')
+                );
+            }
+
+            $network = true;
+            break;
+        }
+
+        else
+        {
+            if ($config->cli->document->crawl->debug->level->warning)
+            {
+                echo sprintf(
+                    _('[%s] [warning] could not connect to socket "%s" port "%d"...') . PHP_EOL,
+                    date('c'),
+                    $host,
+                    $port
+                );
+            }
+        }
+    }
+
+    if (!$network)
+    {
+        if ($config->cli->document->crawl->debug->level->error)
+        {
+            echo sprintf(
+                _('[%s] [error] network unreachable!') . PHP_EOL,
+                date('c')
+            );
+        }
+
+        exit;
+    }
+}
+
 // Init client
 try {
 
