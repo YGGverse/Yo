@@ -66,11 +66,11 @@ if (false === sem_acquire($semaphore, true))
 }
 
 // Check network connection
-if ($config->network->check->enabled)
+if ($config->cli->document->crawl->network->check->enabled)
 {
     $network = false;
 
-    foreach ($config->network->check->socket as $host => $port)
+    foreach ($config->cli->document->crawl->network->check->socket as $host => $port)
     {
         if ($config->cli->document->crawl->debug->level->notice)
         {
@@ -82,7 +82,7 @@ if ($config->network->check->enabled)
             );
         }
 
-        if (\Yggverse\Net\Socket::isOpen($host, $port, $config->network->check->timeout))
+        if (\Yggverse\Net\Socket::isOpen($host, $port, $config->cli->document->crawl->network->check->timeout))
         {
             if ($config->cli->document->crawl->debug->level->notice)
             {
