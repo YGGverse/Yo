@@ -146,7 +146,7 @@
                 {
                     "check":
                     {
-                        "enabled":true,
+                        "enabled":false,
                         "timeout":5,
                         "socket":
                         {
