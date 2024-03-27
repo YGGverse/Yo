@@ -603,19 +603,22 @@ foreach($index->search('')
                     }
 
                     // Save index
-                    $url      = trim($url);
-                    $crc32url = crc32($url);
+                    $url = trim(
+                        $url
+                    );
 
-                    if (!$index->search('')
-                               ->filter('id', $crc32url)
-                               ->limit(1)
-                               ->get()
-                               ->getTotal())
+                    $crc32url = crc32(
+                        $url
+                    );
+
+                    // Check url does not registered yet
+                    $results = $index->search('')->filter('id', $crc32url)->get();
+
+                    if (!$results->getTotal())
                     {
-
                         $index->addDocument(
                             [
-                                'url'  => $url
+                                'url' => $url
                             ],
                             $crc32url
                         );
@@ -628,6 +631,40 @@ foreach($index->search('')
                                 $url,
                                 $config->manticore->index->document->name
                             );
+                        }
+                    }
+
+                    // URL already exists
+                    else
+                    {
+                        // Print notice level notice
+                        if ($config->cli->document->crawl->debug->level->notice)
+                        {
+                            echo sprintf(
+                                _('[%s] [notice] URL "%s" already registered with CRC32 "%d"') . PHP_EOL,
+                                date('c'),
+                                $url,
+                                $crc32url
+                            );
+                        }
+
+                        // Check for event details
+                        foreach ($results as $result)
+                        {
+                            // Is collision
+                            if ($url != $result->get('url'))
+                            {
+                                if ($config->cli->document->crawl->debug->level->warning)
+                                {
+                                    echo sprintf(
+                                        _('[%s] [warning] ID "%d" collision for target url "%s" stored as "%s"') . PHP_EOL,
+                                        date('c'),
+                                        $crc32url,
+                                        $url,
+                                        $result->get('url')
+                                    );
+                                }
+                            }
                         }
                     }
                 }
