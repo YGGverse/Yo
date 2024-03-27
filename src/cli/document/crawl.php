@@ -19,7 +19,7 @@ function getLastSnapTime(array $files): int
         }
 
         $time[] = preg_replace(
-            '/^([\d]+)\.tar\.gz&/',
+            '/^([\d]+)\.tar\.gz$/',
             '$1',
             basename(
                 $file

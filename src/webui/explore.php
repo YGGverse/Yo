@@ -115,7 +115,7 @@ if ($config->snap->storage->local->enabled)
       );
 
       $time = preg_replace(
-        '/^([\d]+)\.tar\.gz&/',
+        '/^([\d]+)\.tar\.gz$/',
         '$1',
         $basename
       );
@@ -169,7 +169,7 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
       );
 
       $time = preg_replace(
-        '/^([\d]+)\.tar\.gz&/',
+        '/^([\d]+)\.tar\.gz$/',
         '$1',
         $basename
       );
