@@ -13,14 +13,14 @@ function getLastSnapTime(array $files): int
 
     foreach ($files as $file)
     {
-        if (in_array($file, ['.', '..']))
+        if (is_dir($filename) || is_link($filename) || str_starts_with('.'))
         {
             continue;
         }
 
         $time[] = preg_replace(
-            '/\D/',
-            '',
+            '/^([\d]+)\.tar\.gz&/',
+            '$1',
             basename(
                 $file
             )
@@ -704,10 +704,6 @@ foreach($index->search('')
                 // Generate path
                 $time = time();
 
-                $md5url = md5(
-                    $document->get('url')
-                );
-
                 /// absolute
                 if (str_starts_with($config->snap->storage->tmp->directory, '/'))
                 {
@@ -725,7 +721,7 @@ foreach($index->search('')
                 $tmp = sprintf(
                     '%s/%s.%s.tar',
                     $filepath,
-                    $md5url,
+                    $document->getId(),
                     $time
                 );
 
@@ -822,7 +818,7 @@ foreach($index->search('')
                             implode(
                                 '/',
                                 str_split(
-                                    $md5url
+                                    $document->getId()
                                 )
                             )
                         );
@@ -960,7 +956,7 @@ foreach($index->search('')
                     $filepath = implode(
                         '/',
                         str_split(
-                            $md5url
+                            $document->getId()
                         )
                     );
 

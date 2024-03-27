@@ -77,14 +77,10 @@ $icon = $identicon->getImageDataUri('webp');
 $snaps = [];
 
 /// Prepare location
-$md5url = md5(
-  $document->url
-);
-
 $filepath = implode(
   '/',
   str_split(
-      $md5url
+    $document->getId()
   )
 );
 
@@ -109,18 +105,25 @@ if ($config->snap->storage->local->enabled)
   {
     foreach ((array) scandir($directory) as $filename)
     {
-      if (in_array($filename, ['.', '..']))
+      if (is_dir($filename) || is_link($filename) || str_starts_with('.'))
       {
         continue;
       }
 
-      $basename = basename($filename);
-      $time = preg_replace('/\D/', '', $basename);
+      $basename = basename(
+        $filename
+      );
+
+      $time = preg_replace(
+        '/^([\d]+)\.tar\.gz&/',
+        '',
+        $basename
+      );
 
       $snaps[_('Local')][] = (object)
       [
         'source' => 'local',
-        'md5url' => $md5url,
+        'id'     => $document->getId(),
         'name'   => $basename,
         'time'   => $time,
         'size'   => filesize(
@@ -161,13 +164,20 @@ foreach ($config->snap->storage->remote->ftp as $i => $ftp)
 
     foreach ((array) $remote->nlist($filepath) as $filename)
     {
-      $basename = basename($filename);
-      $time = preg_replace('/\D/', '', $basename);
+      $basename = basename(
+        $filename
+      );
+
+      $time = preg_replace(
+        '/^([\d]+)\.tar\.gz&/',
+        '',
+        $basename
+      );
 
       $snaps[sprintf(_('Server #%s'), $i + 1)][] = (object)
       [
         'source' => $i,
-        'md5url' => $md5url,
+        'id'     => $document->getId(),
         'name'   => $basename,
         'time'   => $time,
         'size'   => $remote->size($filename),
@@ -481,7 +491,7 @@ if ($config->webui->index->enabled)
                   <ul>
                     <?php foreach ($snap as $file) { ?>
                       <li>
-                        <a rel="nofollow" href="api.php?action=snap&method=download&source=<?php echo $file->source ?>&md5url=<?php echo $file->md5url ?>&time=<?php echo $file->time ?>">
+                        <a rel="nofollow" href="api.php?action=snap&method=download&source=<?php echo $file->source ?>&id=<?php echo $file->id ?>&time=<?php echo $file->time ?>">
                           <?php echo sprintf('%s (tar.gz / %s bytes)', date('c', $file->time), number_format($file->size)) ?>
                         </a>
                       </li>

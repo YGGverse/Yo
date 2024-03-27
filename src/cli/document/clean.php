@@ -116,9 +116,7 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
             implode(
                 '/',
                 str_split(
-                    md5(
-                        $document->get('url')
-                    )
+                    $document->getId()
                 )
             )
         );

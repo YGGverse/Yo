@@ -42,12 +42,12 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
 
                     exit;
 
-                    case isset($_GET['md5url']) && preg_match('/^[a-f0-9]{32}$/', $_GET['md5url']):
+                    case isset($_GET['id']) && preg_match('/^[\d]+$/', $_GET['id']):
 
                         echo json_encode(
                             [
                                 'status'  => false,
-                                'message' => _('valid md5url required')
+                                'message' => _('valid document identifier required')
                             ]
                         );
 
@@ -102,7 +102,7 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                             implode(
                                 '/',
                                 str_split(
-                                    $_GET['md5url']
+                                    $_GET['id']
                                 )
                             ),
                             $_GET['time']
@@ -136,7 +136,7 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                         header(
                             sprintf(
                                 'Content-Disposition: filename="snap.%s.%s"',
-                                $_GET['md5url'],
+                                $_GET['id'],
                                 basename(
                                     $filename
                                 )
@@ -175,7 +175,7 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                         implode(
                             '/',
                             str_split(
-                                $_GET['md5url']
+                                $_GET['id']
                             )
                         ),
                         $_GET['time']
@@ -222,7 +222,7 @@ switch (!empty($_GET['action']) ? $_GET['action'] : false) {
                     header(
                         sprintf(
                             'Content-Disposition: filename="snap.%s.%s"',
-                            $_GET['md5url'],
+                            $_GET['id'],
                             basename(
                                 $filename
                             )
