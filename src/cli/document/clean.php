@@ -123,9 +123,17 @@ foreach ($config->cli->document->crawl->skip->stripos->url as $condition)
 
         if (is_dir($location))
         {
-            if (rmdir($location))
+            foreach ((array) scandir($location) as $filename)
             {
-                $snaps++;
+                if (is_dir($filename) || is_link($filename) || str_starts_with($filename, '.') || !str_ends_with($filename, '.tar.gz'))
+                {
+                    continue;
+                }
+
+                if (unlink($filename))
+                {
+                    $snaps++;
+                }
             }
         }
 
