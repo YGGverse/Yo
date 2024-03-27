@@ -105,7 +105,7 @@ if ($config->snap->storage->local->enabled)
   {
     foreach ((array) scandir($directory) as $filename)
     {
-      if (is_dir($filename) || is_link($filename) || str_starts_with('.'))
+      if (is_dir($filename) || is_link($filename) || str_starts_with($filename, '.'))
       {
         continue;
       }

@@ -13,7 +13,7 @@ function getLastSnapTime(array $files): int
 
     foreach ($files as $file)
     {
-        if (is_dir($filename) || is_link($filename) || str_starts_with('.'))
+        if (is_dir($filename) || is_link($filename) || str_starts_with($filename, '.'))
         {
             continue;
         }
